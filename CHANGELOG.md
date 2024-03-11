@@ -1,3 +1,6 @@
+## 0.0.4
+* request type indicator icon
+
 ## 0.0.3
 * request type in debugprint
 * error print in another line
