@@ -5,6 +5,10 @@ import 'package:n_request/src/enums.dart';
 import 'package:n_request/src/models.dart';
 import 'package:n_request/src/request.dart';
 
+export '/src/enums.dart';
+export '/src/models.dart';
+export '/src/request.dart';
+
 class NRequest{
   final String                url;
   final Map<String, String>?  headers;

@@ -1,6 +1,6 @@
 name: n_request
 description: "Simple helper for http requests"
-version: 0.0.1
+version: 0.0.3
 homepage: https://github.com/nycm1989/nRequest
 repository: https://github.com/nycm1989/nRequest
 
@@ -10,7 +10,6 @@ topics:
   - post
   - put
   - delete
-  - cross-platform
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -62,3 +61,5 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
+
+# dart pub publish --dry-run

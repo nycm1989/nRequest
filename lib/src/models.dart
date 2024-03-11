@@ -17,7 +17,9 @@ class ResponseData{
   });
 
   void printStatus ()=> kDebugMode
-  ? debugPrint( '${_coloredMessage(StatusColor.yellow, "[${status.code}]")} $url → status: ${_coloredMessage(_getStatusColor(status.type), "${status.type.name}, ${status.description}")} ${_getStatusIcon(status.type)}' )
+  ? [ StatusType.clientError, StatusType.serverError ].contains(status.type)
+    ? debugPrint('${_coloredMessage(StatusColor.yellow, "[${status.code}]")} ${type.name.toUpperCase()} → $url → status: ${_coloredMessage(_getStatusColor(status.type), "${status.type.name}, ${status.description}")} ${_getStatusIcon(status.type)}' )
+    : debugPrint('${_coloredMessage(StatusColor.yellow, "[${status.code}]")} ${type.name.toUpperCase()} → $url → status: ${_coloredMessage(_getStatusColor(status.type), status.type.name)} ${_getStatusIcon(status.type)}\n${_coloredMessage(_getStatusColor(status.type), status.description)}')
   : null;
 
   String _coloredMessage(StatusColor mc, String m) => "${
