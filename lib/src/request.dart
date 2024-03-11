@@ -222,12 +222,14 @@ class NCustomRequest{
     try{
       ResponseData data = r != null
       ? ResponseData(
+        type    : model.type,
         isValid : status.type == StatusType.successful,
         status  : status,
         body    : json.decode(utf8.decode(r.bodyBytes)),
         url     : url
       )
       : await sr!.stream.bytesToString().then((value) => ResponseData(
+        type    : model.type,
         isValid : status.type == StatusType.successful,
         status  : status,
         body    : json.decode(value),

@@ -1,3 +1,6 @@
+## 0.0.5
+* request type fix
+
 ## 0.0.4
 * request type indicator icon
 
