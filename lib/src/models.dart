@@ -18,8 +18,8 @@ class ResponseData{
 
   void printStatus ()=> kDebugMode
   ? ![ StatusType.clientError, StatusType.serverError ].contains(status.type)
-    ? debugPrint('${_coloredMessage(StatusColor.yellow, "[${status.code}]")} ${type.name.toUpperCase()} ${_typeIcon(type)} → $url → status: ${_coloredMessage(_getStatusColor(status.type), "${status.type.name}, ${status.description}")} ${_getStatusIcon(status.type)}' )
-    : debugPrint('${_coloredMessage(StatusColor.yellow, "[${status.code}]")} ${type.name.toUpperCase()} ${_typeIcon(type)} → $url → status: ${_coloredMessage(_getStatusColor(status.type), status.type.name)} ${_getStatusIcon(status.type)}\n${_coloredMessage(_getStatusColor(status.type), status.description)}')
+    ? debugPrint('${_coloredMessage(StatusColor.yellow, "[${status.code}]")} ${_typeData(type)} $url → status: ${_coloredMessage(_getStatusColor(status.type), "${status.type.name}, ${status.description}")} ${_getStatusIcon(status.type)}' )
+    : debugPrint('${_coloredMessage(StatusColor.yellow, "[${status.code}]")} ${_typeData(type)} $url → status: ${_coloredMessage(_getStatusColor(status.type), status.type.name)} ${_getStatusIcon(status.type)}\n${_coloredMessage(_getStatusColor(status.type), status.description)}')
   : null;
 
   String _coloredMessage(StatusColor mc, String m) => "${
@@ -34,25 +34,27 @@ class ResponseData{
   '\x1B[0m'}$m\x1B[0m";
 
   StatusColor _getStatusColor (StatusType type) =>
-  type == StatusType.successful  ? StatusColor.blue   :
-  type == StatusType.information ? StatusColor.green  :
-  type == StatusType.redirection ? StatusColor.yellow :
+  type == StatusType.successful   ? StatusColor.blue   :
+  type == StatusType.unsuccessful ? StatusColor.yellow :
+  type == StatusType.information  ? StatusColor.green  :
+  type == StatusType.redirection  ? StatusColor.cyan   :
   StatusColor.red;
 
   String _getStatusIcon(StatusType type) =>
-  status.type == StatusType.information ? '💬' :
-  status.type == StatusType.successful  ? '👍' :
-  status.type == StatusType.redirection ? '♻️' :
-  status.type == StatusType.clientError ? '⚠️' :
-  status.type == StatusType.serverError ? '☢️' :
-  status.type == StatusType.exception   ? '❌' :
+  status.type == StatusType.information   ? '💬' :
+  status.type == StatusType.successful    ? '👍' :
+  status.type == StatusType.unsuccessful  ? '👎' :
+  status.type == StatusType.redirection   ? '♻️' :
+  status.type == StatusType.clientError   ? '⚠️' :
+  status.type == StatusType.serverError   ? '☢️' :
+  status.type == StatusType.exception     ? '❌' :
   '';
 
-  String _typeIcon(RequestType type) =>
-  type == RequestType.get     ? "🟢" :
-  type == RequestType.post    ? "🔵" :
-  type == RequestType.put     ? "🟡" :
-  type == RequestType.delete  ? "🔴" :
+  String _typeData(RequestType type) =>
+  type == RequestType.get     ? "GET –––→ 📨" :
+  type == RequestType.post    ? "POST ––→ 📩" :
+  type == RequestType.put     ? "PUT –––→ 📩" :
+  type == RequestType.delete  ? "DELETE → 🗑️" :
   "";
 
   void printBody ()=> kDebugMode ? debugPrint("$body") : null;
