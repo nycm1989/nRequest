@@ -230,12 +230,12 @@ class NCustomRequest{
       debugPrint(body.toString());
     }
     try{
-      if ( r  == null ){
+      if ( r  != null ){
 
         ResponseData data = ResponseData(
           type    : model.type,
-          status  : _st.singleWhere((e) => e.code == r!.statusCode, orElse: () => const StatusData()),
-          body    : r!.bodyBytes.isEmpty ? null : json.decode(utf8.decode(r.bodyBytes)),
+          status  : _st.singleWhere((e) => e.code == r.statusCode, orElse: () => const StatusData()),
+          body    : r.bodyBytes.isEmpty ? null : json.decode(utf8.decode(r.bodyBytes)),
           url     : url
         );
 
@@ -246,11 +246,11 @@ class NCustomRequest{
 
         return data;
 
-      } else if ( sr == null ){
+      } else if ( sr != null ){
 
         if (printBody) body.toString();
 
-        ResponseData data = await sr!.stream.bytesToString().then((value) => ResponseData(
+        ResponseData data = await sr.stream.bytesToString().then((value) => ResponseData(
           type    : model.type,
           status  : _st.singleWhere((e) => e.code == sr.statusCode, orElse: () => const StatusData()),
           body    : value.isEmpty ? null : json.decode(value),
