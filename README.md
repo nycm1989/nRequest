@@ -36,8 +36,8 @@ token: Map<String, String>?
 body: Map<String, dynamic>
 files: List<MultipartFile>
 timeout: Duration
-printrequestBody: bool
-printResponseBody: bool
+printRequest: bool
+printResponse: bool
 ```
 
 ### ResponseData Properties

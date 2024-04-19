@@ -1,3 +1,6 @@
+## 0.1.0
+* code refactoring
+
 ## 0.0.10
 * Missing request debug print recovered - fix
 

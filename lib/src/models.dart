@@ -16,7 +16,7 @@ class ResponseData{
 
   void printStatus () {
     if(kDebugMode){
-      if([ StatusType.clientError, StatusType.serverError ].contains(status.type)){
+      if([ StatusType.clientError, StatusType.serverError ].contains(status.type)) {
         debugPrint('${ _coloredMessage(StatusColor.yellow, "[${status.code}]") } ${ _typeData(type) } $url → status: ${ _coloredMessage(_getStatusColor(status.type), status.type.name) } ${ _getStatusIcon(status.type) }');
         debugPrint(_coloredMessage(_getStatusColor(status.type), status.error));
       } else {
