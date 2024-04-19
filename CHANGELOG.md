@@ -1,3 +1,6 @@
+## 0.0.7
+* Request improvements
+
 ## 0.0.6
 * unsuccessful codes updated
 * No return messages return a null value now

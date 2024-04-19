@@ -6,21 +6,24 @@ class ResponseData{
   RequestType type;
   StatusData  status;
   dynamic     body;
-  bool        isValid;
 
   ResponseData({
     this.url    = "",
     this.type   = RequestType.get,
     this.status = const StatusData(),
     this.body,
-    this.isValid = false,
   });
 
-  void printStatus ()=> kDebugMode
-  ? ![ StatusType.clientError, StatusType.serverError ].contains(status.type)
-    ? debugPrint('${_coloredMessage(StatusColor.yellow, "[${status.code}]")} ${_typeData(type)} $url → status: ${_coloredMessage(_getStatusColor(status.type), "${status.type.name}, ${status.description}")} ${_getStatusIcon(status.type)}' )
-    : debugPrint('${_coloredMessage(StatusColor.yellow, "[${status.code}]")} ${_typeData(type)} $url → status: ${_coloredMessage(_getStatusColor(status.type), status.type.name)} ${_getStatusIcon(status.type)}\n${_coloredMessage(_getStatusColor(status.type), status.description)}')
-  : null;
+  void printStatus () {
+    if(kDebugMode){
+      if([ StatusType.clientError, StatusType.serverError ].contains(status.type)){
+        debugPrint('${ _coloredMessage(StatusColor.yellow, "[${status.code}]") } ${ _typeData(type) } $url → status: ${ _coloredMessage(_getStatusColor(status.type), status.type.name) } ${ _getStatusIcon(status.type) }');
+        debugPrint(_coloredMessage(_getStatusColor(status.type), status.error));
+      } else {
+        debugPrint('${ _coloredMessage(StatusColor.yellow, "[${status.code}]") } ${ _typeData(type) } $url → status: ${ _coloredMessage(_getStatusColor(status.type), "${status.type.name}, ${status.description}") } ${ _getStatusIcon(status.type) }' );
+      }
+    }
+  }
 
   String _coloredMessage(StatusColor mc, String m) => "${
   mc == StatusColor.black   ? '\x1b[30m' :
@@ -51,7 +54,7 @@ class ResponseData{
   '';
 
   String _typeData(RequestType type) =>
-  type == RequestType.get     ? "GET –––→ 📨" :
+  type == RequestType.get     ? "GET –––→ 💬" :
   type == RequestType.post    ? "POST ––→ 📩" :
   type == RequestType.put     ? "PUT –––→ 📩" :
   type == RequestType.delete  ? "DELETE → 🗑️" :
@@ -64,11 +67,15 @@ class StatusData{
   final StatusType type;
   final int        code;
   final String     description;
+  final bool       isValid;
+  final String     error;
 
   const StatusData({
     this.type        = StatusType.exception,
     this.code        = 0,
     this.description = "",
+    this.isValid     = false,
+    this.error       = "",
   });
 
   String getMessage ({String url = '', bool hasCode = true}) => "${hasCode ? '[$code] ' : ''} $url → status: ${type.name}, $description";
