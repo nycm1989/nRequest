@@ -225,7 +225,6 @@ class NCustomRequest{
     final Response? r,
     final StreamedResponse? sr,
   }) async {
-    model.printStatus();
 
     if (printBody) {
       debugPrint("Request body -------------------------- ▼");
@@ -241,6 +240,8 @@ class NCustomRequest{
           url     : url
         );
 
+        data.printStatus();
+
         if (printBody) {
           debugPrint("Response ------------------------------ ▼");
           data.printBody();
@@ -250,14 +251,14 @@ class NCustomRequest{
 
       } else if ( sr != null ){
 
-        if (printBody) body.toString();
-
         ResponseData data = await sr.stream.bytesToString().then((value) => ResponseData(
           type    : model.type,
           status  : _st.singleWhere((e) => e.code == sr.statusCode, orElse: () => const StatusData()),
           body    : value.isEmpty ? null : json.decode(value),
           url     : url
         ));
+
+        data.printStatus();
 
         if (printBody) {
           debugPrint("Response ------------------------------ ▼");

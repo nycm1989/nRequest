@@ -20,11 +20,11 @@ await NRequest(
 ```
 ### Methods
 ```dart
-await NRequest("").get((response) {});
-await NRequest("").post((response) {});
-await NRequest("").put((response) {});
-await NRequest("").delete((response) {});
-await NRequest("").type(type: RequestType.post).then((response) {});
+await NRequest("url").get((response) {});
+await NRequest("url").post((response) {});
+await NRequest("url").put((response) {});
+await NRequest("url").delete((response) {});
+await NRequest("url").type(type: RequestType.post).then((response) {});
 ```
 
 
@@ -46,7 +46,6 @@ url: String
 type: RequestType
 status: StatusData
 body: dynamic
-isValid: bool
 
 /// print a colored message, only works in debug mode
 printStatus()
@@ -56,6 +55,7 @@ printStatus()
 ```dart
 type: StatusType
 code: int
+isValid: bool
 description: String
 
 /// get status data message

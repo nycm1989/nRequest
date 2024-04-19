@@ -1,3 +1,6 @@
+## 0.0.10
+* Missing request debug print recovered - fix
+
 ## 0.0.9
 * Missing request debug print recovered
 
