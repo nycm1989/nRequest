@@ -1,3 +1,6 @@
+## 0.0.9
+* Missing request debug print recovered
+
 ## 0.0.8
 * Request nulleable issue fix
 

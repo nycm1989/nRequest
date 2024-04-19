@@ -225,6 +225,8 @@ class NCustomRequest{
     final Response? r,
     final StreamedResponse? sr,
   }) async {
+    model.printStatus();
+
     if (printBody) {
       debugPrint("Request body -------------------------- ▼");
       debugPrint(body.toString());
