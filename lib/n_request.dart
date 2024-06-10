@@ -8,6 +8,7 @@ import 'package:n_request/src/request.dart';
 export '/src/enums.dart';
 export '/src/models.dart';
 export '/src/request.dart';
+export '/src/socket.dart';
 
 class NRequest{
   final String                url;
@@ -20,11 +21,11 @@ class NRequest{
   final bool                  printResponse;
 
   NRequest(this.url, {
-    this.body               = const <String, dynamic>{},
-    this.files              = const [],
-    this.timeout            = const Duration(minutes: 5),
-    this.printRequest   = false,
-    this.printResponse  = false,
+    this.body          = const <String, dynamic>{},
+    this.files         = const [],
+    this.timeout       = const Duration(minutes: 5),
+    this.printRequest  = false,
+    this.printResponse = false,
     this.headers,
     this.token,
   });

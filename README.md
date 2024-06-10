@@ -3,10 +3,11 @@
 this is a simple helper project for http request
 
 ## With this widget, you can:
-- make get, post, put, delete request
-- make a custom request by type
-- upload multipart files
-- change headers
+- Make get, post, put, delete request
+- Make a custom request by type
+- Upload multipart files
+- Change headers
+- New! single or multiple WebSocket with restarter and error control!
 
 ## Example
 ```dart
@@ -18,6 +19,8 @@ await NRequest(
     if(response.isValid) response.printStatus();
 });
 ```
+
+
 ### Methods
 ```dart
 await NRequest("url").get((response) {});
@@ -60,4 +63,43 @@ description: String
 
 /// get status data message
 getMessage(): String
+```
+
+
+### WebSocket
+```dart
+
+SocketData? socketData;
+SocketController? socketController;
+
+socketData = SocketData(
+    name      : "Clients socket",
+    url       : "ws url",
+    function  : (message) => smsFunction(message)
+);
+
+// This is a setter and controller if you want to listen conection status
+socketData?.addListener(()=> setState(() {}));
+
+socketData?.hasChannelConnection : bool
+socketData?.hasSocketConnection : bool
+
+
+// SUPORT FOR A SINGLE OR MULTIPLE SOCKETS!
+socketController = SocketController.single(socket: socketData)
+socketController = SocketController.group( sockets: [socketData1, socketData2, ...] )
+
+// Start listening; this includes a restarter that attempts to reconnect to the socket
+// in case of disconnections or reconnections.
+socketController?.listen();
+
+// Always dispose contrllers
+@override
+void dispose() {
+    super.dispose();
+    socketData = null;
+    socketData?.dispose();
+    socketController = null;
+    socketController?.closeAll();
+}
 ```

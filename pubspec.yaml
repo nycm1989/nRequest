@@ -1,6 +1,6 @@
 name: n_request
 description: "Simple helper for http requests"
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/nycm1989/nRequest
 repository: https://github.com/nycm1989/nRequest
 
@@ -19,6 +19,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.2.1
+  web_socket_channel: ^3.0.0
 
 dev_dependencies:
   flutter_test:
