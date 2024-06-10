@@ -1,3 +1,6 @@
+## 0.2.2
+* flutter_lints commited
+
 ## 0.2.1
 * readme updated
 
