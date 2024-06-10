@@ -69,8 +69,8 @@ getMessage(): String
 ### WebSocket
 ```dart
 
-SocketData? socketData;
-SocketController? socketController;
+NSocketData? socketData;
+NSocketController? socketController;
 
 socketData = SocketData(
     name      : "Clients socket",
@@ -86,8 +86,8 @@ socketData?.hasSocketConnection : bool
 
 
 // SUPORT FOR A SINGLE OR MULTIPLE SOCKETS!
-socketController = SocketController.single(socket: socketData)
-socketController = SocketController.group( sockets: [socketData1, socketData2, ...] )
+socketController = NSocketController.single(socket: socketData)
+socketController = NSocketController.group( sockets: [socketData1, socketData2, ...] )
 
 // Start listening; this includes a restarter that attempts to reconnect to the socket
 // in case of disconnections or reconnections.

@@ -1,3 +1,6 @@
+## 0.2.1
+* readme updated
+
 ## 0.2.0
 * Single or multiple WebSocket with restarter and error control
 

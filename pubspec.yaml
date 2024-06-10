@@ -1,6 +1,6 @@
 name: n_request
 description: "Simple helper for http requests"
-version: 0.2.0
+version: 0.2.1
 homepage: https://github.com/nycm1989/nRequest
 repository: https://github.com/nycm1989/nRequest
 
