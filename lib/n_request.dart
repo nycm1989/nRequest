@@ -40,7 +40,7 @@ class NRequest{
     files         : files,
     timeout       : timeout,
     token         : token,
-    printHeaders  : printRequest,
+    printHeaders  : printHeaders,
     printRequest  : printRequest,
     printResponse : printResponse,
   ).then((value) => value);
