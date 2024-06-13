@@ -1,3 +1,6 @@
+## 0.2.4
+* printHeaders fix
+
 ## 0.2.3
 * printHeaders
 

@@ -17,6 +17,7 @@ class NRequest{
   final Map<String, dynamic>  body;
   final List<MultipartFile>   files;
   final Duration              timeout;
+  final bool                  printHeaders;
   final bool                  printRequest;
   final bool                  printResponse;
 
@@ -24,6 +25,7 @@ class NRequest{
     this.body          = const <String, dynamic>{},
     this.files         = const [],
     this.timeout       = const Duration(minutes: 5),
+    this.printHeaders  = false,
     this.printRequest  = false,
     this.printResponse = false,
     this.headers,
@@ -31,13 +33,14 @@ class NRequest{
   });
 
   Future<ResponseData> _request(RequestType type) async => await NCustomRequest.make(
-    type              : type,
-    url               : url,
-    headers           : headers,
-    body              : body,
-    files             : files,
-    timeout           : timeout,
-    token             : token,
+    type          : type,
+    url           : url,
+    headers       : headers,
+    body          : body,
+    files         : files,
+    timeout       : timeout,
+    token         : token,
+    printHeaders  : printRequest,
     printRequest  : printRequest,
     printResponse : printResponse,
   ).then((value) => value);
