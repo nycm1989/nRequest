@@ -39,6 +39,7 @@ token: Map<String, String>?
 body: Map<String, dynamic>
 files: List<MultipartFile>
 timeout: Duration
+printHeaders: bool
 printRequest: bool
 printResponse: bool
 ```

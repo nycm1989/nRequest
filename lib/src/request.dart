@@ -26,6 +26,7 @@ class NCustomRequest{
     Map<String, dynamic>  body          = const <String, dynamic>{},
     List<MultipartFile>   files         = const [],
     Duration              timeout       = const Duration(minutes: 5),
+    bool                  printHeaders = false,
     bool                  printRequest  = false,
     bool                  printResponse = false,
   }) async {
@@ -51,6 +52,11 @@ class NCustomRequest{
 
         for (var file in files){ multipartRequest.files.add(file); }
 
+        if (printHeaders) {
+          debugPrint("Headers ------------------------------- ▼");
+          debugPrint(h.toString());
+        }
+
         if(printRequest ) debugPrint("$body");
         return await multipartRequest.send().then((sr) async => await _buildResponse(
           type : type,
@@ -65,6 +71,11 @@ class NCustomRequest{
           "Content-Type": 'application/json',
           "Accept"      : 'application/json',
         });
+
+        if (printHeaders) {
+          debugPrint("Headers ------------------------------- ▼");
+          debugPrint(h.toString());
+        }
 
         return Future(() async {
           if( type == RequestType.get ){
