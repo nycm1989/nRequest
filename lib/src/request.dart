@@ -32,7 +32,7 @@ class NCustomRequest{
   }) async {
     if (printRequest) {
       debugPrint("Request body -------------------------- ▼");
-      debugPrint(body.toString());
+      debugPrint(json.encode(body));
     }
 
     Map<String, String> h = headers??_h;
@@ -54,10 +54,10 @@ class NCustomRequest{
 
         if (printHeaders) {
           debugPrint("Headers ------------------------------- ▼");
-          debugPrint(h.toString());
+          debugPrint(json.encode(h));
         }
 
-        if(printRequest ) debugPrint("$body");
+        if(printRequest ) debugPrint(json.encode(body));
         return await multipartRequest.send().then((sr) async => await _buildResponse(
           type : type,
           sr   : sr,
@@ -74,7 +74,7 @@ class NCustomRequest{
 
         if (printHeaders) {
           debugPrint("Headers ------------------------------- ▼");
-          debugPrint(h.toString());
+          debugPrint(json.encode(h));
         }
 
         return Future(() async {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:n_request/src/enums.dart';
 
@@ -60,7 +62,7 @@ class ResponseData{
   type == RequestType.delete  ? "DELETE → 🗑️" :
   "";
 
-  void printBody ()=> kDebugMode ? debugPrint("$body") : null;
+  void printBody ()=> kDebugMode ? debugPrint(json.encode(body)) : null;
 }
 
 class StatusData{

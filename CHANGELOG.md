@@ -1,3 +1,6 @@
+## 0.2.6
+* All prints return a quoted json now
+
 ## 0.2.5
 * printHeaders fix
 
