@@ -7,7 +7,8 @@ this is a simple helper project for http request
 - Make a custom request by type
 - Upload multipart files
 - Change headers
-- New! single or multiple WebSocket with restarter and error control!
+- Single or multiple WebSocket with restarter and error control!
+- Donwload any file from https or http
 
 ## Example
 ```dart
@@ -23,11 +24,12 @@ await NRequest(
 
 ### Methods
 ```dart
-await NRequest("url").get((response) {});
-await NRequest("url").post((response) {});
-await NRequest("url").put((response) {});
-await NRequest("url").delete((response) {});
-await NRequest("url").type(type: RequestType.post).then((response) {});
+await NRequest("url").download((Uint8List? data) {});
+await NRequest("url").get((ResponseData response) {});
+await NRequest("url").post((ResponseData response) {});
+await NRequest("url").put((ResponseData response) {});
+await NRequest("url").delete((ResponseData response) {});
+await NRequest("url").type(type: RequestType.post).then((ResponseData response) {});
 ```
 
 

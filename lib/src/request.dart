@@ -18,6 +18,84 @@ class NCustomRequest{
     "crossOrigin"                       : "Anonymous"
   };
 
+  static Future<Uint8List?> download({
+    required String       url,
+    Map<String, String>?  headers,
+    Map<String, String>?  token,
+    Duration              timeout       = const Duration(minutes: 5),
+    bool                  printHeaders = false,
+  }) async {
+
+    Map<String, String> h = headers??_h;
+    if(token != null) {
+      h.addAll(token);
+    }
+
+    try {
+        h.addAll({
+          "Content-Type": 'application/json',
+          "Accept"      : 'application/json',
+        });
+
+        if (printHeaders) {
+          debugPrint("Headers ------------------------------- ▼");
+          debugPrint(json.encode(h));
+        }
+
+        return Future(() async {
+          List<String> list = url.split("://");
+          if (list.length <= 1) {
+            return null;
+          } else {
+
+            String type = list.first.toLowerCase();
+            list = list.last.split("/");
+            String domain = list.first;
+            list.remove(domain);
+            String path = list.join("/");
+
+            List<String> _n = list.last.split(".");
+            if (_n.length <= 1 && _n.length != 2) {
+              return null;
+            } else {
+
+              Request request = Request(
+                "GET",
+                type.toLowerCase() == 'https'
+                ? Uri.https(domain, path, headers)
+                : Uri.http(domain, path, headers)
+              );
+
+              request.followRedirects = false;
+              return await request.send().then((value) async{
+                if(value.statusCode == 200){
+                  try{
+                    return await value.stream.toBytes().then((bytes) => bytes.isEmpty ? null : bytes).onError((error, trace) => null);
+                  } catch (e) {
+                    return null;
+                  }
+                } else {
+                  return null;
+                }
+              });
+            }
+          }
+        });
+    }
+    on TimeoutException {
+      return null;
+    }
+    on SocketException {
+      return null;
+    }
+    on ClientException  {
+      return null;
+    }
+    catch (error) {
+      return null;
+    }
+  }
+
   static Future<ResponseData> make({
     required String       url,
     required RequestType  type,
