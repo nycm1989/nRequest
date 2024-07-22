@@ -1,3 +1,9 @@
+## 0.3.1
+* Restore Loosing data
+
+## 0.3.0
+* new download request
+
 ## 0.2.6
 * All prints return a quoted json now
 

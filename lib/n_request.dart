@@ -1,5 +1,7 @@
 library n_request;
 
+import 'dart:typed_data';
+
 import 'package:http/http.dart';
 import 'package:n_request/src/enums.dart';
 import 'package:n_request/src/models.dart';
@@ -45,9 +47,17 @@ class NRequest{
     printResponse : printResponse,
   ).then((value) => value);
 
-  Future<R> get    <R>(Function(ResponseData response) onValue) async => await _request(RequestType.get   ).then((response) async => await onValue.call(response) );
-  Future<R> post   <R>(Function(ResponseData response) onValue) async => await _request(RequestType.post  ).then((response) async => await onValue.call(response) );
-  Future<R> put    <R>(Function(ResponseData response) onValue) async => await _request(RequestType.put   ).then((response) async => await onValue.call(response) );
-  Future<R> delete <R>(Function(ResponseData response) onValue) async => await _request(RequestType.delete).then((response) async => await onValue.call(response) );
+  Future<R> Download  <R>(Function(Uint8List? data) onValue) async => await NCustomRequest.download(
+    url           : url,
+    headers       : headers,
+    timeout       : timeout,
+    token         : token,
+    printHeaders  : printHeaders,
+  ).then((value) => onValue.call(value));
+
+  Future<R> get       <R>(Function(ResponseData response) onValue) async => await _request(RequestType.get   ).then((response) async => await onValue.call(response) );
+  Future<R> post      <R>(Function(ResponseData response) onValue) async => await _request(RequestType.post  ).then((response) async => await onValue.call(response) );
+  Future<R> put       <R>(Function(ResponseData response) onValue) async => await _request(RequestType.put   ).then((response) async => await onValue.call(response) );
+  Future<R> delete    <R>(Function(ResponseData response) onValue) async => await _request(RequestType.delete).then((response) async => await onValue.call(response) );
   Future<ResponseData> type ({required RequestType type}) async => await _request(type);
 }
