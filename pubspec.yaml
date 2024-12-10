@@ -1,6 +1,6 @@
 name: n_request
 description: "Simple helper for http requests"
-version: 0.3.1
+version: 0.3.2
 homepage: https://github.com/nycm1989/nRequest
 repository: https://github.com/nycm1989/nRequest
 
@@ -12,19 +12,19 @@ topics:
   - delete
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: ^3.5.4
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.2.1
-  web_socket_channel: ^3.0.0
+  http: ^1.2.2
+  web_socket_channel: ^3.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  # flutter_lints: ^3.0.0
+  # flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

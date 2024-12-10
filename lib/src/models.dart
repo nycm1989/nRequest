@@ -1,7 +1,8 @@
-import 'dart:convert';
+import 'dart:convert' show json;
+import 'dart:io' show Platform;
 
-import 'package:flutter/foundation.dart';
-import 'package:n_request/src/enums.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
+import 'package:n_request/src/enums.dart' show RequestType, StatusColor, StatusType;
 
 class ResponseData{
   String      url;
@@ -19,10 +20,24 @@ class ResponseData{
   void printStatus () {
     if(kDebugMode){
       if([ StatusType.clientError, StatusType.serverError ].contains(status.type)) {
-        debugPrint('${ _coloredMessage(StatusColor.yellow, "[${status.code}]") } ${ _typeData(type) } $url → status: ${ _coloredMessage(_getStatusColor(status.type), status.type.name) } ${ _getStatusIcon(status.type) }');
-        debugPrint(_coloredMessage(_getStatusColor(status.type), status.error));
+        if (kIsWeb){
+          if(kDebugMode) print('[${status.code}] ${ _typeData(type, true) } $url → status: ${status.type.name}');
+          if(kDebugMode) print(status.error);
+        } else if (Platform.isMacOS || Platform.isIOS || Platform.isLinux) {
+          if(kDebugMode) print('[${status.code}] ${ _typeData(type, true) } $url → status: ${status.type.name}');
+          if(kDebugMode) print(status.error);
+        } else {
+          if(kDebugMode) print('${ _coloredMessage(StatusColor.yellow, "[${status.code}]") } ${ _typeData(type, true) } $url → status: ${ _coloredMessage(_getStatusColor(status.type), status.type.name) } ${_getStatusIcon(status.type)}');
+          if(kDebugMode) print(_coloredMessage(_getStatusColor(status.type), status.error));
+        }
       } else {
-        debugPrint('${ _coloredMessage(StatusColor.yellow, "[${status.code}]") } ${ _typeData(type) } $url → status: ${ _coloredMessage(_getStatusColor(status.type), "${status.type.name}, ${status.description}") } ${ _getStatusIcon(status.type) }' );
+        if (kIsWeb){
+          if(kDebugMode) print('[${status.code}] ${ _typeData(type, false) } $url → status: ${"${status.type.name}, ${status.description}"}');
+        } else if (Platform.isMacOS || Platform.isIOS || Platform.isLinux) {
+          if(kDebugMode) print('[${status.code}] ${ _typeData(type, false) } $url → status: ${"${status.type.name}, ${status.description}"}');
+        } else {
+          if(kDebugMode) print('${ _coloredMessage(StatusColor.yellow, "[${status.code}]") } ${ _typeData(type, true) } $url → status: ${ _coloredMessage(_getStatusColor(status.type), "${status.type.name}, ${status.description}")} ${_getStatusIcon(status.type)}' );
+        }
       }
     }
   }
@@ -55,14 +70,14 @@ class ResponseData{
   status.type == StatusType.exception     ? '❌' :
   '';
 
-  String _typeData(RequestType type) =>
-  type == RequestType.get     ? "GET –––→ 💬" :
-  type == RequestType.post    ? "POST ––→ 📩" :
-  type == RequestType.put     ? "PUT –––→ 📩" :
-  type == RequestType.delete  ? "DELETE → 🗑️" :
+  String _typeData(RequestType type, bool icons) =>
+  type == RequestType.get     ? "GET –––→ ${icons ? "💬" : ""}" :
+  type == RequestType.post    ? "POST ––→ ${icons ? "📩" : ""}" :
+  type == RequestType.put     ? "PUT –––→ ${icons ? "📩" : ""}" :
+  type == RequestType.delete  ? "DELETE → ${icons ? "🗑️" : ""}" :
   "";
 
-  void printBody ()=> kDebugMode ? debugPrint(json.encode(body)) : null;
+  void printBody ()=> kDebugMode ? print(json.encode(body)) : null;
 }
 
 class StatusData{

@@ -1,4 +1,4 @@
-import 'package:n_request/n_request.dart';
+import 'package:n_request/n_request.dart' show StatusData, StatusType;
 
 const List<StatusData> statusList = [
     StatusData(type: StatusType.information,  isValid: false, code: 100, description: "Continue"                        ),

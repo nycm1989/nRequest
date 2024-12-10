@@ -1,11 +1,11 @@
-import 'dart:io';
-import 'dart:async';
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart';
-import 'package:n_request/src/enums.dart' show RequestType;
-import 'package:n_request/src/models.dart';
-import 'package:n_request/src/status.dart';
+import 'dart:io' show SocketException;
+import 'dart:async' show Future, FutureExtensions, TimeoutException;
+import 'dart:convert' show json, utf8;
+import 'package:flutter/foundation.dart' show Uint8List, kDebugMode;
+import 'package:http/http.dart' show Client, ClientException, MultipartFile, MultipartRequest, Request, Response, StreamedResponse;
+import 'enums.dart' show RequestType;
+import 'package:n_request/src/models.dart' show ResponseData, StatusData;
+import 'package:n_request/src/status.dart' show statusList;
 
 class NCustomRequest{
 
@@ -23,13 +23,12 @@ class NCustomRequest{
     Map<String, String>?  headers,
     Map<String, String>?  token,
     Duration              timeout       = const Duration(minutes: 5),
-    bool                  printHeaders = false,
+    bool printUrl     = false,
+    bool printHeader  = false,
   }) async {
 
     Map<String, String> h = headers??_h;
-    if(token != null) {
-      h.addAll(token);
-    }
+    if(token != null) h.addAll(token);
 
     try {
         h.addAll({
@@ -37,16 +36,14 @@ class NCustomRequest{
           "Accept"      : 'application/json',
         });
 
-        if (printHeaders) {
-          debugPrint("Headers ------------------------------- ▼");
-          debugPrint(json.encode(h));
-        }
+        if (printHeader) if(kDebugMode) print("Header -> ${json.encode(h)}");
 
         return Future(() async {
           List<String> list = url.split("://");
           if (list.length <= 1) {
             return null;
           } else {
+            if(printUrl) if(kDebugMode) print("Url -> $url");
 
             String type = list.first.toLowerCase();
             list = list.last.split("/");
@@ -97,29 +94,31 @@ class NCustomRequest{
   }
 
   static Future<ResponseData> make({
-    required String       url,
-    required RequestType  type,
-    Map<String, String>?  headers,
-    Map<String, String>?  token,
-    Map<String, dynamic>  body          = const <String, dynamic>{},
-    List<MultipartFile>   files         = const [],
-    Duration              timeout       = const Duration(minutes: 5),
-    bool                  printHeaders = false,
-    bool                  printRequest  = false,
-    bool                  printResponse = false,
+    required final String       url,
+    required final RequestType  type,
+    final Map<String, String>?  headers,
+    final Map<String, String>?  token,
+    final Map<String, dynamic>  body          = const <String, dynamic>{},
+    final List<MultipartFile>   files         = const [],
+    final Duration              timeout       = const Duration(minutes: 5),
+    required final bool silent,
+    required final bool printUrl,
+    required final bool printHeader,
+    required final bool printBody,
+    required final bool printResponse,
+    final Function()? onStart,
+    final Function()? onFinish,
   }) async {
-    if (printRequest) {
-      debugPrint("Request body -------------------------- ▼");
-      debugPrint(json.encode(body));
-    }
-
     Map<String, String> h = headers??_h;
-    if(token != null) {
-      h.addAll(token);
-    }
+    if(token != null) h.addAll(token);
+
+    if (printUrl      ) if(kDebugMode) print("Url      -> $url");
+    if (printBody     ) if(kDebugMode) print("Body     -> ${json.encode(body)}");
 
     try {
       if (files.isNotEmpty){
+        if(onStart != null) onStart.call();
+
         h.addAll({"Content-Type": 'multipart/form-data'});
         Map<String, String> data = <String, String>{};
         body.forEach((key, value) => data[key] = value.toString());
@@ -130,12 +129,8 @@ class NCustomRequest{
 
         for (var file in files){ multipartRequest.files.add(file); }
 
-        if (printHeaders) {
-          debugPrint("Headers ------------------------------- ▼");
-          debugPrint(json.encode(h));
-        }
+        if (printHeader   ) if(kDebugMode) print("Header   -> ${json.encode(h)}");
 
-        if(printRequest ) debugPrint(json.encode(body));
         return await multipartRequest.send().then((sr) async => await _buildResponse(
           type : type,
           sr   : sr,
@@ -150,10 +145,7 @@ class NCustomRequest{
           "Accept"      : 'application/json',
         });
 
-        if (printHeaders) {
-          debugPrint("Headers ------------------------------- ▼");
-          debugPrint(json.encode(h));
-        }
+        if (printHeader   ) if(kDebugMode) print("Header   -> ${json.encode(h)}");
 
         return Future(() async {
           if( type == RequestType.get ){
@@ -164,7 +156,7 @@ class NCustomRequest{
                 url  : url,
                 body : body
               ).then((r) => response = r)
-            );
+            ).onError((error, stackTrace) => _makeError(error, stackTrace, url, type));
           } else if (type == RequestType.post) {
             await Client().post( Uri.parse(url), headers: h, body: json.encode( body ) ).timeout(timeout).then((r) async =>
               await _buildResponse(
@@ -173,7 +165,7 @@ class NCustomRequest{
                 url  : url,
                 body : body
               ).then((r) => response = r)
-            );
+            ).onError((error, stackTrace) => _makeError(error, stackTrace, url, type));
           } else if (type == RequestType.put) {
             await Client().put( Uri.parse(url), headers: h, body: json.encode( body ) ).timeout(timeout).then((r) async =>
               await _buildResponse(
@@ -182,7 +174,7 @@ class NCustomRequest{
                 url  : url,
                 body : body
               ).then((r) => response = r)
-            );
+            ).onError((error, stackTrace) => _makeError(error, stackTrace, url, type));
           } else if(type == RequestType.delete) {
             await Client().delete( Uri.parse(url), headers: h, body: json.encode( body ) ).timeout(timeout).then((r) async =>
               await _buildResponse(
@@ -191,16 +183,12 @@ class NCustomRequest{
                 url  : url,
                 body : body
               ).then((r) => response = r)
-            );
+            ).onError((error, stackTrace) => _makeError(error, stackTrace, url, type));
           } else { response = ResponseData(); }
         }).then((_) {
-          response.printStatus();
-
-          if (printResponse) {
-            debugPrint("Response ------------------------------ ▼");
-            response.printBody();
-          }
-
+          if(onFinish != null) onFinish.call();
+          if(!silent) response.printStatus();
+          if (printResponse ) if(kDebugMode) print("Response -> ${json.encode(h)}");
           return response;
         });
       }
@@ -215,7 +203,7 @@ class NCustomRequest{
           error       : "Exceeded ${timeout.toString()} waiting time"
         )
       );
-      response.printStatus();
+      if(!silent) response.printStatus();
       return response;
     }
     on SocketException {
@@ -228,7 +216,7 @@ class NCustomRequest{
           error       : "Cant connect to the server"
         )
       );
-      response.printStatus();
+      if(!silent) response.printStatus();
       return response;
     }
     on ClientException  {
@@ -241,7 +229,7 @@ class NCustomRequest{
           error       : "Incompatible connection"
         )
       );
-      response.printStatus();
+      if(!silent) response.printStatus();
       return response;
     }
     catch (error) {
@@ -254,7 +242,7 @@ class NCustomRequest{
           error       : "$error"
         )
       );
-      response.printStatus();
+      if(!silent) response.printStatus();
       return response;
     }
   }
@@ -306,5 +294,11 @@ class NCustomRequest{
         ),
       );
     }
+  }
+
+  static _makeError(Object? error, StackTrace stackTrace, String url, RequestType type) {
+    if(kDebugMode) print("$error");
+    if(kDebugMode) print("$stackTrace");
+    return ResponseData( url: url, type: type, status: StatusData( description: "Request Exception", error: error.toString() ) );
   }
 }

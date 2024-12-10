@@ -1,7 +1,7 @@
-import 'dart:async';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'dart:async' show Future, StreamSubscription, Timer;
+import 'dart:io' show SocketException, WebSocketException;
+import 'package:flutter/foundation.dart' show ChangeNotifier, kDebugMode;
+import 'package:web_socket_channel/web_socket_channel.dart' show WebSocketChannel, WebSocketChannelException;
 
 class NSocketData extends ChangeNotifier {
   final String name;
@@ -48,7 +48,7 @@ class NSocketData extends ChangeNotifier {
     if ( !status ) {
       closeChannel();
       closeSocket();
-      debugPrint("$name -> $url can't connect to channel 👎${error != null ? "\n$error" : ''}");
+      if(kDebugMode) print("$name -> $url can't connect to channel 👎${error != null ? "\n$error" : ''}");
     }
     notifyListeners();
   }
@@ -56,11 +56,11 @@ class NSocketData extends ChangeNotifier {
   changeSocketConnection({required bool status, String? error}){
     hasSocketConnection = status;
     if ( status ) {
-      debugPrint("$name channel listening 👍");
+      if(kDebugMode) print("$name channel listening 👍");
     } else {
       closeChannel();
       closeSocket();
-      debugPrint("$name channel error 👎${error != null ? "\n$error" : ''}");
+      if(kDebugMode) print("$name channel error 👎${error != null ? "\n$error" : ''}");
     }
     notifyListeners();
   }

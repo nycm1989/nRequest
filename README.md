@@ -41,9 +41,12 @@ token: Map<String, String>?
 body: Map<String, dynamic>
 files: List<MultipartFile>
 timeout: Duration
-printHeaders: bool
-printRequest: bool
+printUrl: bool
+printHeader: bool
+printBody: bool
 printResponse: bool
+onStart: Function()
+onFinish: Function()
 ```
 
 ### ResponseData Properties

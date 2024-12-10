@@ -1,3 +1,11 @@
+## 0.3.2
+* [NEW] onStart() sync function
+* [NEW] onFinish() sync function
+* [NEW] printUrl
+* printHeaders changed to printHeader
+* printRequest changed to printBody
+* More error controll
+
 ## 0.3.1
 * Restore Loosing data
 
@@ -8,10 +16,10 @@
 * All prints return a quoted json now
 
 ## 0.2.5
-* printHeaders fix
+* printHeader fix
 
 ## 0.2.3
-* printHeaders
+* printHeader
 
 ## 0.2.2
 * flutter_lints commited
