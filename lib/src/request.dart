@@ -188,7 +188,7 @@ class NCustomRequest{
         }).then((_) {
           if(onFinish != null) onFinish.call();
           if(!silent) response.printStatus();
-          if (printResponse ) if(kDebugMode) print("Response -> ${json.encode(h)}");
+          if (printResponse ) if(kDebugMode) response.printBody();
           return response;
         });
       }

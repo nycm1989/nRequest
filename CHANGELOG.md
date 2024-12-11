@@ -1,3 +1,6 @@
+## 0.3.3
+* printResponse error Fixed
+
 ## 0.3.2
 * [NEW] onStart() sync function
 * [NEW] onFinish() sync function
