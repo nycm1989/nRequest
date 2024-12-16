@@ -109,6 +109,8 @@ class NCustomRequest{
     final Function()? onStart,
     final Function()? onFinish,
   }) async {
+    if(onStart != null) onStart.call();
+
     Map<String, String> h = headers??_h;
     if(token != null) h.addAll(token);
 
@@ -117,7 +119,6 @@ class NCustomRequest{
 
     try {
       if (files.isNotEmpty){
-        if(onStart != null) onStart.call();
 
         h.addAll({"Content-Type": 'multipart/form-data'});
         Map<String, String> data = <String, String>{};
@@ -136,7 +137,10 @@ class NCustomRequest{
           sr   : sr,
           url  : url,
           body : body
-        ));
+        )).then((response) async{
+          if(onFinish != null) onFinish.call();
+          return response;
+        });
 
       } else {
         ResponseData response = ResponseData();
