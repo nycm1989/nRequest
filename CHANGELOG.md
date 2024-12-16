@@ -1,3 +1,6 @@
+## 0.3.3+1
+* little fix for startting and finishing functions
+
 ## 0.3.3
 * printResponse error Fixed
 

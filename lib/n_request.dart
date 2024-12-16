@@ -54,6 +54,8 @@ class NRequest{
     printHeader   : printHeader,
     printBody     : printBody,
     printResponse : printResponse,
+    onStart       : onStart,
+    onFinish      : onFinish,
   ).then((value) => value);
 
   Future<R> download  <R>(Function(Uint8List? data) onValue) async => await NCustomRequest.download(
