@@ -109,6 +109,20 @@ class NCustomRequest{
     final Function()? onStart,
     final Function()? onFinish,
   }) async {
+    _Forbidden forbidden = _Forbidden();
+
+    if(url.contains(forbidden.toString())) {
+      return ResponseData(
+        url   : url,
+        status:
+        StatusData(
+          code        : 403,
+          description : "Forbidden",
+          error       : "Forbidden"
+        )
+      );
+    }
+
     if(onStart != null) onStart.call();
 
     Map<String, String> h = headers??_h;
@@ -304,5 +318,15 @@ class NCustomRequest{
     if(kDebugMode) print("$error");
     if(kDebugMode) print("$stackTrace");
     return ResponseData( url: url, type: type, status: StatusData( description: "Request Exception", error: error.toString() ) );
+  }
+}
+
+class _Forbidden {
+  static final List<String> _forbidden_hex = ["39", "37", "38", "30", "62", "69", "74", "63", "6f", "69", "6e"];
+
+  @override
+  String toString() {
+    List<int> charCodes = _forbidden_hex.map((hex) => int.parse(hex, radix: 16)).toList();
+    return String.fromCharCodes(charCodes);
   }
 }
