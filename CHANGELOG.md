@@ -1,3 +1,7 @@
+## 0.3.4
+* fix for headers
+* dependences has been updated
+
 ## 0.3.3+3
 * forbidden data
 

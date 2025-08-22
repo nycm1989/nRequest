@@ -125,8 +125,8 @@ class NCustomRequest{
 
     if(onStart != null) onStart.call();
 
-    Map<String, String> h = headers??_h;
-    if(token != null) h.addAll(token);
+    Map<String, String> _header = {};
+    if(token != null) _header.addAll(token);
 
     if (printUrl      ) if(kDebugMode) print("Url      -> $url");
     if (printBody     ) if(kDebugMode) print("Body     -> ${json.encode(body)}");
@@ -134,17 +134,19 @@ class NCustomRequest{
     try {
       if (files.isNotEmpty){
 
-        h.addAll({"Content-Type": 'multipart/form-data'});
+        _header.addAll({"Content-Type": 'multipart/form-data'});
         Map<String, String> data = <String, String>{};
         body.forEach((key, value) => data[key] = value.toString());
 
         MultipartRequest multipartRequest = MultipartRequest( type.name.toUpperCase(), Uri.parse(url) )
-        ..headers.addAll(h)
+        ..headers.addAll(_header)
         ..fields.addAll(data);
 
         for (var file in files){ multipartRequest.files.add(file); }
 
-        if (printHeader   ) if(kDebugMode) print("Header   -> ${json.encode(h)}");
+        if(headers != null) _header = headers;
+
+        if (printHeader   ) if(kDebugMode) print("Header   -> ${json.encode(_header)}");
 
         return await multipartRequest.send().then((sr) async => await _buildResponse(
           type : type,
@@ -158,16 +160,17 @@ class NCustomRequest{
 
       } else {
         ResponseData response = ResponseData();
-        h.addAll({
+        _header.addAll({
           "Content-Type": 'application/json',
           "Accept"      : 'application/json',
         });
 
-        if (printHeader   ) if(kDebugMode) print("Header   -> ${json.encode(h)}");
+        if(headers != null) _header = headers;
+        if (printHeader   ) if(kDebugMode) print("Header   -> ${json.encode(_header)}");
 
         return Future(() async {
           if( type == RequestType.get ){
-            await Client().get( Uri.parse(url), headers : h ).timeout(timeout).then((r) async =>
+            await Client().get( Uri.parse(url), headers : _header ).timeout(timeout).then((r) async =>
               await _buildResponse(
                 type : type,
                 r    : r,
@@ -176,7 +179,7 @@ class NCustomRequest{
               ).then((r) => response = r)
             ).onError((error, stackTrace) => _makeError(error, stackTrace, url, type));
           } else if (type == RequestType.post) {
-            await Client().post( Uri.parse(url), headers: h, body: json.encode( body ) ).timeout(timeout).then((r) async =>
+            await Client().post( Uri.parse(url), headers: _header, body: json.encode( body ) ).timeout(timeout).then((r) async =>
               await _buildResponse(
                 type : type,
                 r    : r,
@@ -185,7 +188,7 @@ class NCustomRequest{
               ).then((r) => response = r)
             ).onError((error, stackTrace) => _makeError(error, stackTrace, url, type));
           } else if (type == RequestType.put) {
-            await Client().put( Uri.parse(url), headers: h, body: json.encode( body ) ).timeout(timeout).then((r) async =>
+            await Client().put( Uri.parse(url), headers: _header, body: json.encode( body ) ).timeout(timeout).then((r) async =>
               await _buildResponse(
                 type : type,
                 r    : r,
@@ -194,7 +197,7 @@ class NCustomRequest{
               ).then((r) => response = r)
             ).onError((error, stackTrace) => _makeError(error, stackTrace, url, type));
           } else if(type == RequestType.delete) {
-            await Client().delete( Uri.parse(url), headers: h, body: json.encode( body ) ).timeout(timeout).then((r) async =>
+            await Client().delete( Uri.parse(url), headers: _header, body: json.encode( body ) ).timeout(timeout).then((r) async =>
               await _buildResponse(
                 type : type,
                 r    : r,
