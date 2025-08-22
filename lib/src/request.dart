@@ -96,9 +96,10 @@ class NCustomRequest{
   static Future<ResponseData> make({
     required final String       url,
     required final RequestType  type,
+    required final bool formData,
     final Map<String, String>?  headers,
     final Map<String, String>?  token,
-    final Map<String, dynamic>  body          = const <String, dynamic>{},
+    final dynamic body,
     final List<MultipartFile>   files         = const [],
     final Duration              timeout       = const Duration(minutes: 5),
     required final bool silent,
@@ -132,9 +133,9 @@ class NCustomRequest{
     if (printBody     ) if(kDebugMode) print("Body     -> ${json.encode(body)}");
 
     try {
-      if (files.isNotEmpty){
+      if (formData){
 
-        _header.addAll({"Content-Type": 'multipart/form-data'});
+        // _header.addAll({"Content-Type": 'multipart/form-data'});
         Map<String, String> data = <String, String>{};
         body.forEach((key, value) => data[key] = value.toString());
 
@@ -269,7 +270,7 @@ class NCustomRequest{
   }
 
   static Future<ResponseData> _buildResponse({
-    required final Map<String, dynamic>  body,
+    required final dynamic body,
     required final RequestType type,
     required final String url,
     final Response? r,

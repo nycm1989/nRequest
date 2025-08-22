@@ -39,6 +39,7 @@ url: String // Required string
 headers: Map<String, String>?
 token: Map<String, String>?
 body: Map<String, dynamic>
+formData: bool // Changue for multipart request
 files: List<MultipartFile>
 timeout: Duration
 printUrl: bool

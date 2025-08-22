@@ -1,3 +1,7 @@
+## 0.3.5
+* data are now dynamic
+* new formData boolean
+
 ## 0.3.4
 * fix for headers
 * dependences has been updated

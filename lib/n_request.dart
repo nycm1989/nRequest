@@ -15,10 +15,11 @@ class NRequest{
   final String                url;
   final Map<String, String>?  headers;
   final Map<String, String>?  token;
-  final Map<String, dynamic>  body;
+  final dynamic               body;
   final List<MultipartFile>   files;
   final Duration              timeout;
   final bool                  silent;
+  final bool                  formData;
   final bool                  printUrl;
   final bool                  printHeader;
   final bool                  printBody;
@@ -27,10 +28,11 @@ class NRequest{
   final Function()?           onFinish;
 
   NRequest(this.url, {
-    this.body          = const <String, dynamic>{},
+    this.body,
     this.files         = const [],
     this.timeout       = const Duration(minutes: 5),
     this.silent        = false,
+    this.formData      = false,
     this.printUrl      = false,
     this.printHeader   = false,
     this.printBody     = false,
@@ -56,6 +58,7 @@ class NRequest{
     printResponse : printResponse,
     onStart       : onStart,
     onFinish      : onFinish,
+    formData      : files.isNotEmpty ? true : formData
   ).then((value) => value);
 
   Future<R> download  <R>(Function(Uint8List? data) onValue) async => await NCustomRequest.download(
