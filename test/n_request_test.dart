@@ -8,7 +8,7 @@ void main() async {
     onStart       : ()=> print("start"),
     onFinish      : ()=> print("finish"),
     printUrl      : true,
-    printHeader   : true,
+    printHeaders  : true,
     printBody     : true,
     printResponse : true
   ).get((response) {});

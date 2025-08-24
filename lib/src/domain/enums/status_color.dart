@@ -1,0 +1,11 @@
+enum StatusColor{
+  black,
+  red,
+  green,
+  yellow,
+  blue,
+  magenta,
+  cyan,
+  white,
+  none
+}

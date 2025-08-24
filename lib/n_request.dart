@@ -1,17 +1,17 @@
 library n_request;
 
-import 'dart:typed_data' show Uint8List;
 import 'package:http/http.dart' show MultipartFile;
-import 'package:n_request/src/enums.dart' show RequestType;
-import 'package:n_request/src/models.dart' show ResponseData;
-import 'package:n_request/src/request.dart' show NCustomRequest;
+import 'package:n_request/src/application/request_use_case.dart';
+import 'package:n_request/src/domain/enums/request_type.dart' show RequestType;
+import 'package:n_request/src/domain/models/response_data.dart' show ResponseData;
+import 'package:n_request/src/infraestructure/adapters/form_data_adapter.dart';
+import 'package:n_request/src/infraestructure/adapters/request_adapter.dart';
 
-export '/src/enums.dart';
-export '/src/models.dart';
-export '/src/request.dart';
+export '/src/domain/enums/request_type.dart';
+export '/src/domain/models/response_data.dart';
 export '/src/socket.dart';
 
-class NRequest{
+class NRequest<R>{
   final String                url;
   final Map<String, String>?  headers;
   final Map<String, String>?  token;
@@ -21,7 +21,7 @@ class NRequest{
   final bool                  silent;
   final bool                  formData;
   final bool                  printUrl;
-  final bool                  printHeader;
+  final bool                  printHeaders;
   final bool                  printBody;
   final bool                  printResponse;
   final Function()?           onStart;
@@ -34,7 +34,7 @@ class NRequest{
     this.silent        = false,
     this.formData      = false,
     this.printUrl      = false,
-    this.printHeader   = false,
+    this.printHeaders   = false,
     this.printBody     = false,
     this.printResponse = false,
     this.headers,
@@ -43,7 +43,12 @@ class NRequest{
     this.onFinish,
   });
 
-  Future<ResponseData> _request(RequestType type) async => await NCustomRequest.make(
+  Future<ResponseData> _request(RequestType type) async =>
+  await RequestUseCase(
+    port: (files.isNotEmpty ? true : formData)
+    ? FormDataAdapter()
+    : RequestAdapter()
+  ).make(
     type          : type,
     url           : url,
     headers       : headers,
@@ -53,25 +58,38 @@ class NRequest{
     token         : token,
     printUrl      : printUrl,
     silent        : silent,
-    printHeader   : printHeader,
+    printHeaders  : printHeaders,
     printBody     : printBody,
     printResponse : printResponse,
     onStart       : onStart,
     onFinish      : onFinish,
-    formData      : files.isNotEmpty ? true : formData
   ).then((value) => value);
 
-  Future<R> download  <R>(Function(Uint8List? data) onValue) async => await NCustomRequest.download(
-    url           : url,
-    headers       : headers,
-    timeout       : timeout,
-    token         : token,
-    printHeader   : printHeader,
-  ).then((value) => onValue.call(value));
 
-  Future<R> get       <R>(Function(ResponseData response) onValue) async => await _request(RequestType.get   ).then((response) async => await onValue.call(response) );
-  Future<R> post      <R>(Function(ResponseData response) onValue) async => await _request(RequestType.post  ).then((response) async => await onValue.call(response) );
-  Future<R> put       <R>(Function(ResponseData response) onValue) async => await _request(RequestType.put   ).then((response) async => await onValue.call(response) );
-  Future<R> delete    <R>(Function(ResponseData response) onValue) async => await _request(RequestType.delete).then((response) async => await onValue.call(response) );
+  Future<R> download (Function(ResponseData? response) onValue) async =>
+  await _request(RequestType.download).then((response) async =>
+    await onValue.call(response)
+  );
+
+  Future<R> get (Function(ResponseData response) onValue) async =>
+  await _request(RequestType.get).then((response) async =>
+    await onValue.call(response)
+  );
+
+  Future<R> post (Function(ResponseData response) onValue) async =>
+  await _request(RequestType.post).then((response) async =>
+    await onValue.call(response)
+  );
+
+  Future<R> put (Function(ResponseData response) onValue) async =>
+  await _request(RequestType.put).then((response) async =>
+    await onValue.call(response)
+  );
+
+  Future<R> delete (Function(ResponseData response) onValue) async =>
+  await _request(RequestType.delete).then((response) async =>
+    await onValue.call(response)
+  );
+
   Future<ResponseData> type ({required RequestType type}) async => await _request(type);
 }

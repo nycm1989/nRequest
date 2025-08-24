@@ -1,3 +1,6 @@
+## 1.0.0
+* code has been upgraded
+
 ## 0.3.5
 * data are now dynamic
 * new formData boolean
