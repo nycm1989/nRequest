@@ -26,7 +26,6 @@ class ResponseFactory {
     }
 
     try{
-
       if ( response is Response ) {
         return ResponseData(
           type    : type,
@@ -44,17 +43,25 @@ class ResponseFactory {
             url     : url
           )
         );
-      }
-      else {
-        return ResponseData(
-          type    : type,
-          url     : url,
-          status  :
-          StatusData(
-            description : "Request Exception",
-            error       : "There is no response"
-          ),
-        );
+      } else {
+        if(type == RequestType.download && body != null) {
+          return ResponseData(
+            type    : type,
+            url     : url,
+            body    : body,
+            status  : StatusRepository().getStatus(response.statusCode),
+          );
+        } else {
+          return ResponseData(
+            type    : type,
+            url     : url,
+            status  :
+            StatusData(
+              description : "Request Exception",
+              error       : "There is no response"
+            ),
+          );
+        }
       }
     } catch (error) {
       return onError(

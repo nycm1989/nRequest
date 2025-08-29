@@ -1,3 +1,6 @@
+## 1.0.1
+* download response as been upgraded
+
 ## 1.0.0
 * code has been upgraded
 
