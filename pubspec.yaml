@@ -10,6 +10,7 @@ topics:
   - get
   - post
   - put
+  - patch
   - delete
 
 environment:
@@ -19,12 +20,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  path: ^1.9.1
   web_socket_channel: ^3.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  # flutter_lints: ^4.0.0
+  # flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
