@@ -1,15 +1,16 @@
 library n_request;
 
-import 'package:http/http.dart' show MultipartFile;
-import 'package:n_request/src/application/request_use_case.dart';
 import 'package:n_request/src/domain/enums/request_type.dart' show RequestType;
 import 'package:n_request/src/domain/models/response_data.dart' show ResponseData;
-import 'package:n_request/src/infraestructure/adapters/form_data_adapter.dart';
-import 'package:n_request/src/infraestructure/adapters/request_adapter.dart';
+import 'package:n_request/src/application/request_use_case.dart' show RequestUseCase;
+import 'package:n_request/src/domain/models/multipart_file.dart' show MultipartFile;
+import 'package:n_request/src/infraestructure/adapters/request_adapter.dart' show RequestAdapter;
+import 'package:n_request/src/infraestructure/adapters/form_data_adapter.dart' show FormDataAdapter;
 
+export '/src/socket.dart';
 export '/src/domain/enums/request_type.dart';
 export '/src/domain/models/response_data.dart';
-export '/src/socket.dart';
+export '/src/domain/models/multipart_file.dart';
 
 class NRequest<R>{
   final String                url;
@@ -83,6 +84,11 @@ class NRequest<R>{
 
   Future<R> put (Function(ResponseData response) onValue) async =>
   await _request(RequestType.put).then((response) async =>
+    await onValue.call(response)
+  );
+
+  Future<R> patch (Function(ResponseData response) onValue) async =>
+  await _request(RequestType.patch).then((response) async =>
     await onValue.call(response)
   );
 

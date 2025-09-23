@@ -1,3 +1,8 @@
+## 1.1.0
+* http dependence has been removed
+* Added support for PATCH methods
+* Added new class MultipartFile
+
 ## 1.0.1
 * download response as been upgraded
 

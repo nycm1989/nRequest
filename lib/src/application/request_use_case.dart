@@ -1,11 +1,11 @@
-import 'package:http/http.dart' show MultipartFile;
 import 'package:n_request/src/domain/enums/request_type.dart' show RequestType;
 import 'package:n_request/src/domain/models/response_data.dart' show ResponseData;
-import 'package:n_request/src/infraestructure/factory/print_factory.dart';
-import 'package:n_request/src/infraestructure/factory/response_factory.dart' show ResponseFactory;
+import 'package:n_request/src/domain/models/multipart_file.dart' show MultipartFile;
 import 'package:n_request/src/infraestructure/ports/request_port.dart' show RequestPort;
+import 'package:n_request/src/infraestructure/factory/print_factory.dart' show PrintFactory;
+import 'package:n_request/src/infraestructure/factory/response_factory.dart' show ResponseFactory;
 import 'package:n_request/src/infraestructure/repositories/forbidden_repository.dart' show ForbiddenRepository;
-import 'package:n_request/src/infraestructure/repositories/header_repository.dart';
+import 'package:n_request/src/infraestructure/repositories/header_repository.dart' show HeaderRepository;
 
 class RequestUseCase{
   final RequestPort port;
@@ -61,6 +61,16 @@ class RequestUseCase{
 
       else if(type == RequestType.put) {
         return port.put(
+          headers : _headers,
+          url     : url,
+          body    : body,
+          timeout : timeout,
+          files   : files
+        );
+      }
+
+      else if(type == RequestType.patch) {
+        return port.patch(
           headers : _headers,
           url     : url,
           body    : body,

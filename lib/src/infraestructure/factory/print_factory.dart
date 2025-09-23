@@ -65,6 +65,7 @@ class PrintFactory{
   type == RequestType.get       ? "GET ––--–-→ ${icons ? "💬" : ""}" :
   type == RequestType.post      ? "POST –--–-→ ${icons ? "💾" : ""}" :
   type == RequestType.put       ? "PUT ––--–-→ ${icons ? "📩" : ""}" :
+  type == RequestType.put       ? "PATCH –-–-→ ${icons ? "📩" : ""}" :
   type == RequestType.delete    ? "DELETE ---→ ${icons ? "🗑️" : ""}" :
   type == RequestType.download  ? "DOWNLOAD -→ ${icons ? "🗑️" : ""}" :
   "";

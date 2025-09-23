@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert' show json, utf8;
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' show Response, StreamedResponse;
 import 'package:n_request/src/domain/models/status_data.dart' show StatusData;
 import 'package:n_request/src/domain/enums/request_type.dart' show RequestType;
 import 'package:n_request/src/domain/models/response_data.dart' show ResponseData;
@@ -26,22 +26,13 @@ class ResponseFactory {
     }
 
     try{
-      if ( response is Response ) {
+      if ( response is HttpClientResponse ) {
+        final bytes = await response.fold<List<int>>(<int>[], (a, b) => a..addAll(b));
         return ResponseData(
           type    : type,
           status  : StatusRepository().getStatus(response.statusCode),
-          body    : response.bodyBytes.isEmpty ? null : json.decode(utf8.decode(response.bodyBytes)),
+          body    : bytes.isEmpty ? null : json.decode(utf8.decode(bytes)),
           url     : url
-        );
-      }
-      else if ( response is StreamedResponse ) {
-        return await response.stream.bytesToString().then((value) =>
-          ResponseData(
-            type    : type,
-            status  : StatusRepository().getStatus(response.statusCode),
-            body    : body is Uint8List ? body : value.isEmpty ? null : json.decode(value),
-            url     : url
-          )
         );
       } else {
         if(type == RequestType.download && body != null) {
@@ -49,7 +40,7 @@ class ResponseFactory {
             type    : type,
             url     : url,
             body    : body,
-            status  : StatusRepository().getStatus(response.statusCode),
+            status  : StatusRepository().getStatus(500),
           );
         } else {
           return ResponseData(
