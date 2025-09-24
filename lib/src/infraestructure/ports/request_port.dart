@@ -14,7 +14,7 @@ abstract class RequestPort {
   /// The optional [files] parameter allows including multipart files in the request.
   /// Returns a [ResponseData] object containing the server's response.
   Future<ResponseData> get ({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final Duration timeout,
     required final List<MultipartFile> files,
@@ -26,7 +26,7 @@ abstract class RequestPort {
   /// The optional [files] parameter allows including multipart files in the request.
   /// Returns a [ResponseData] object containing the server's response.
   Future<ResponseData> post ({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -39,7 +39,7 @@ abstract class RequestPort {
   /// The optional [files] parameter allows including multipart files in the request.
   /// Returns a [ResponseData] object containing the server's response.
   Future<ResponseData> put ({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -52,7 +52,7 @@ abstract class RequestPort {
   /// The optional [files] parameter allows including multipart files in the request.
   /// Returns a [ResponseData] object containing the server's response.
   Future<ResponseData> patch ({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -65,7 +65,7 @@ abstract class RequestPort {
   /// The optional [files] parameter allows including multipart files in the request.
   /// Returns a [ResponseData] object containing the server's response.
   Future<ResponseData> delete ({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -78,7 +78,7 @@ abstract class RequestPort {
   /// The optional [files] parameter allows including multipart files in the request.
   /// Returns a [ResponseData] object containing the server's response headers.
   Future<ResponseData> head ({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final Duration timeout,
     required final List<MultipartFile> files,
@@ -90,7 +90,7 @@ abstract class RequestPort {
   /// The optional [files] parameter allows including multipart files in the request.
   /// Returns a [ResponseData] object containing the server's response.
   Future<ResponseData> read ({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final Duration timeout,
     required final List<MultipartFile> files,
@@ -101,7 +101,7 @@ abstract class RequestPort {
   /// This method is intended for downloading files. Returns a [ResponseData]
   /// object containing the download result or file data.
   Future<ResponseData> download ({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url
   });
 }

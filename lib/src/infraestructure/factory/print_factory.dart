@@ -90,12 +90,12 @@ class PrintFactory{
     type == RequestType.head      ? "HEAD -–-–-→ ${icons ? "🫥" : ""}" :
     type == RequestType.read      ? "READ -–-–-→ ${icons ? "👀" : ""}" :
     type == RequestType.delete    ? "DELETE ---→ ${icons ? "🗑️" : ""}" :
-    type == RequestType.download  ? "DOWNLOAD -→ ${icons ? "🗑️" : ""}" :
+    type == RequestType.download  ? "DOWNLOAD -→ ${icons ? "🗂️" : ""}" :
     "";
 
   /// Prints the request URL to the console in debug mode.
   static void printUrl(final String url) =>
-    kDebugMode ? print(" URL: $url") : null;
+    kDebugMode ? print("- URL: $url") : null;
 
   /// Prints the request headers as a JSON string in debug mode.
   static void printHeaders(final Map<String, String> headers) =>

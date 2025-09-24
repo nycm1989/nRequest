@@ -38,10 +38,20 @@ class ResponseFactory {
     try{
       if ( response is HttpClientResponse ) {
         final bytes = await response.fold<List<int>>(<int>[], (a, b) => a..addAll(b));
+        dynamic decodedBody;
+        if (bytes.isEmpty) {
+          decodedBody = null;
+        } else {
+          try {
+            decodedBody = json.decode(utf8.decode(bytes));
+          } catch (_) {
+            decodedBody = utf8.decode(bytes);
+          }
+        }
         return ResponseData(
           type    : type,
           status  : StatusRepository().getStatus(response.statusCode),
-          body    : bytes.isEmpty ? null : json.decode(utf8.decode(bytes)),
+          body    : decodedBody,
           url     : url
         );
       } else {
@@ -50,17 +60,13 @@ class ResponseFactory {
             type    : type,
             url     : url,
             body    : body,
-            status  : StatusRepository().getStatus(500),
+            status  : StatusRepository().getStatus(200),
           );
         } else {
           return ResponseData(
             type    : type,
             url     : url,
-            status  :
-            StatusData(
-              description : "Request Exception",
-              error       : "There is no response"
-            ),
+            status  : StatusRepository().getStatus(500),
           );
         }
       }
@@ -89,58 +95,61 @@ class ResponseFactory {
 
   /// Returns a [ResponseData] representing a timeout (408) HTTP status.
   ///
-  /// The [timeout] duration is included in the [StatusData.error] message to indicate how long was exceeded.
-  /// Fetches the 408 status from [StatusRepository] and customizes its error description.
+  /// Creates a fresh [StatusData] with a descriptive error message
+  /// instead of mutating a shared instance.
   ResponseData timeoutException({
     required final Duration timeout,
     required final String url,
-    required final RequestType type
+    required final RequestType type,
   }) {
-    StatusData status = StatusRepository().getStatus(408);
-    status.error      = "Exceeded ${timeout.toString()} waiting time";
+    final StatusData base = StatusRepository().getStatus(408);
+    final StatusData status = StatusData(
+      description: base.description,
+      error: "Exceeded ${timeout.toString()} waiting time",
+    );
 
     return ResponseData(
-      url     : url,
-      type    : type,
-      status  : status
+      url: url,
+      type: type,
+      status: status,
     );
   }
 
   /// Returns a [ResponseData] representing a socket exception scenario.
   ///
-  /// Fetches a generic status (code 0) from [StatusRepository] and customizes the description and error
-  /// to indicate a socket connection failure.
+  /// Creates a fresh [StatusData] instead of mutating shared instances.
   ResponseData socketException({
     required final String url,
-    required final RequestType type
+    required final RequestType type,
   }) {
-    StatusData status   = StatusRepository().getStatus(0);
-    status.description  = "Request Socket Exception";
-    status.error        = "Cant connect to the server";
+    final StatusData status = StatusData(
+      description: "Request Socket Exception",
+      error: "Can't connect to the server",
+    );
 
     return ResponseData(
-      url     : url,
-      type    : type,
-      status  : status
+      url: url,
+      type: type,
+      status: status,
     );
   }
 
   /// Returns a [ResponseData] representing a client exception scenario.
   ///
-  /// Uses [StatusRepository] to fetch a generic status (code 0) and sets a description and error
-  /// indicating an incompatible connection.
+  /// Creates a fresh [StatusData] instead of mutating shared instances.
   ResponseData clientException({
     required final String url,
-    required final RequestType type
+    required final RequestType type,
   }) {
-    StatusData status   = StatusRepository().getStatus(0);
-    status.description  = "Request Client Exception";
-    status.error        = "Incompatible connection";
+    final StatusData status = StatusData(
+      description: "Request Client Exception",
+      error: "Incompatible connection",
+    );
 
     return ResponseData(
-      url     : url,
-      type    : type,
-      status  : status
+      url: url,
+      type: type,
+      status: status,
     );
   }
 
@@ -154,8 +163,11 @@ class ResponseFactory {
     required final String url,
     required final RequestType type
   }) {
-    StatusData status = StatusRepository().getStatus(0);
-    status.error      = "$error${stackTrace == null ? "" : "\n$stackTrace"}";
+    final base = StatusRepository().getStatus(0);
+    final StatusData status = StatusData(
+      description: base.description,
+      error: "$error${stackTrace == null ? "" : "\n$stackTrace"}",
+    );
 
     return ResponseData(
       url     : url,

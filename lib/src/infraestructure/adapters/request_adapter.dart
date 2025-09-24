@@ -26,19 +26,20 @@ class RequestAdapter implements RequestPort{
   /// Uses [RequestType.get] to indicate the request type.
   @override
   Future<ResponseData> get({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final Duration timeout,
     required final List files,
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.get;
-    Map<String, String> _headers = headers;
-    _headers.addAll(HeaderRepository().jsonHeaders);
 
     try{
       return await http
-      .get(Uri.parse(url), headers: _headers)
+      .get(
+        Uri.parse(url),
+        headers: headers ?? {...HeaderRepository().jsonHeaders, ...HeaderRepository().corsHeaders}
+      )
       .timeout(timeout)
       .then((response) async =>
         await responseFactory.make(
@@ -51,7 +52,7 @@ class RequestAdapter implements RequestPort{
     }
     on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
     on http.ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type); }
+    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
   }
 
 
@@ -67,7 +68,7 @@ class RequestAdapter implements RequestPort{
   /// Uses [RequestType.post] to indicate the request type.
   @override
   Future<ResponseData> post({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -75,26 +76,27 @@ class RequestAdapter implements RequestPort{
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.post;
-    final String _body = json.encode( body );
-    Map<String, String> _headers = headers;
-    _headers.addAll(HeaderRepository().jsonHeaders);
 
     try{
       return await http
-      .post(Uri.parse(url), headers: _headers, body: _body)
+      .post(
+        Uri.parse(url),
+        headers : headers ?? {...HeaderRepository().jsonHeaders, ...HeaderRepository().corsHeaders},
+        body    : body == null ? null : json.encode(body)
+      )
       .timeout(timeout)
       .then((response) async =>
         await responseFactory.make(
           type      : type,
           response  : response,
           url       : url,
-          body      : _body
+          body      : response.body
         )
       );
     }
     on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
     on http.ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type); }
+    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
   }
 
 
@@ -110,7 +112,7 @@ class RequestAdapter implements RequestPort{
   /// Uses [RequestType.put] to indicate the request type.
   @override
   Future<ResponseData> put({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -118,26 +120,27 @@ class RequestAdapter implements RequestPort{
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.put;
-    final String _body = json.encode( body );
-    Map<String, String> _headers = headers;
-    _headers.addAll(HeaderRepository().jsonHeaders);
 
-    try{
+    try {
       return await http
-      .put(Uri.parse(url), headers: _headers, body: _body)
+      .put(
+        Uri.parse(url),
+        headers : headers ?? {...HeaderRepository().jsonHeaders, ...HeaderRepository().corsHeaders},
+        body    : body == null ? null : json.encode(body)
+      )
       .timeout(timeout)
       .then((response) async =>
         await responseFactory.make(
           type      : type,
           response  : response,
           url       : url,
-          body      : _body
+          body      : response.body
         )
       );
     }
     on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
     on http.ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error)       { return responseFactory.onError(url: url, type: type); }
+    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
   }
 
 
@@ -153,7 +156,7 @@ class RequestAdapter implements RequestPort{
   /// Uses [RequestType.patch] to indicate the request type.
   @override
   Future<ResponseData> patch({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -161,26 +164,27 @@ class RequestAdapter implements RequestPort{
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.patch;
-    final String _body = json.encode( body );
-    Map<String, String> _headers = headers;
-    _headers.addAll(HeaderRepository().jsonHeaders);
 
-    try{
+    try {
       return await http
-      .patch(Uri.parse(url), headers: _headers, body: _body)
+      .patch(
+        Uri.parse(url),
+        headers : headers ?? {...HeaderRepository().jsonHeaders, ...HeaderRepository().corsHeaders},
+        body    : body == null ? null : json.encode(body)
+      )
       .timeout(timeout)
       .then((response) async =>
         await responseFactory.make(
           type      : type,
           response  : response,
           url       : url,
-          body      : _body
+          body      : response.body
         )
       );
     }
     on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
     on http.ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type); }
+    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
   }
 
 
@@ -196,7 +200,7 @@ class RequestAdapter implements RequestPort{
   /// Uses [RequestType.delete] to indicate the request type.
   @override
   Future<ResponseData> delete({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -204,26 +208,27 @@ class RequestAdapter implements RequestPort{
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.delete;
-    final String _body = json.encode( body );
-    Map<String, String> _headers = headers;
-    _headers.addAll(HeaderRepository().jsonHeaders);
 
-    try{
+    try {
       return await http
-      .delete(Uri.parse(url), headers: _headers, body: _body)
+      .delete(
+        Uri.parse(url),
+        headers : headers ?? {...HeaderRepository().jsonHeaders, ...HeaderRepository().corsHeaders},
+        body    : body == null ? null : json.encode(body)
+      )
       .timeout(timeout)
       .then((response) async =>
         await responseFactory.make(
           type      : type,
           response  : response,
           url       : url,
-          body      : _body
+          body      : response.body
         )
       );
     }
     on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
     on http.ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error)       { return responseFactory.onError(url: url, type: type); }
+    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
   }
 
 
@@ -237,19 +242,20 @@ class RequestAdapter implements RequestPort{
   /// Returns a [ResponseData] object representing the response.
   @override
   Future<ResponseData> head({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final Duration timeout,
     required final List files,
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.head;
-    Map<String, String> _headers = headers;
-    _headers.addAll(HeaderRepository().jsonHeaders);
 
     try{
       return await http
-      .head(Uri.parse(url), headers: _headers)
+      .head(
+        Uri.parse(url),
+        headers: headers ?? {...HeaderRepository().jsonHeaders, ...HeaderRepository().corsHeaders}
+      )
       .timeout(timeout)
       .then((response) async =>
         await responseFactory.make(
@@ -262,7 +268,7 @@ class RequestAdapter implements RequestPort{
     }
     on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
     on http.ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error)       { return responseFactory.onError(url: url, type: type); }
+    catch (error){ return responseFactory.onError(url: url, type: type, error: error); }
   }
 
 
@@ -276,19 +282,20 @@ class RequestAdapter implements RequestPort{
   /// Returns a [ResponseData] object representing the response.
   @override
   Future<ResponseData> read({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final Duration timeout,
     required final List files,
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.read;
-    Map<String, String> _headers = headers;
-    _headers.addAll(HeaderRepository().jsonHeaders);
 
     try{
       return await http
-      .read(Uri.parse(url), headers: _headers)
+      .get(
+        Uri.parse(url),
+        headers: headers ?? {...HeaderRepository().jsonHeaders, ...HeaderRepository().corsHeaders}
+      )
       .timeout(timeout)
       .then((response) async =>
         await responseFactory.make(
@@ -301,7 +308,7 @@ class RequestAdapter implements RequestPort{
     }
     on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
     on http.ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error)       { return responseFactory.onError(url: url, type: type); }
+    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
   }
 
 
@@ -314,7 +321,7 @@ class RequestAdapter implements RequestPort{
   /// Uses [RequestType.download] to indicate the request type.
   @override
   Future<ResponseData> download({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
@@ -322,7 +329,10 @@ class RequestAdapter implements RequestPort{
 
     try{
       return await http
-      .get(Uri.parse(url), headers: headers)
+      .get(
+        Uri.parse(url),
+        headers: headers ?? {...HeaderRepository().jsonHeaders, ...HeaderRepository().corsHeaders}
+      )
       .timeout(const Duration(seconds: 30))
       .then((response) async {
         // If the HTTP status code is 200 (OK), return the body bytes if not empty,
@@ -346,7 +356,7 @@ class RequestAdapter implements RequestPort{
       });
     }
     on http.ClientException  { return responseFactory.socketException(url: url, type: type); }
-    catch (error)       { return responseFactory.onError(url: url, type: type, error: error); }
+    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
   }
 
 }

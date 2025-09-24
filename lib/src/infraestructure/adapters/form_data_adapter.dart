@@ -27,7 +27,7 @@ class FormDataAdapter implements RequestPort{
   /// Returns a [Future] of [ResponseData].
   @override
   Future<ResponseData> get({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final Duration timeout,
     required final List<MultipartFile> files,
@@ -52,7 +52,7 @@ class FormDataAdapter implements RequestPort{
   /// Returns a [Future] of [ResponseData].
   @override
   post({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -78,7 +78,7 @@ class FormDataAdapter implements RequestPort{
   /// Returns a [Future] of [ResponseData].
   @override
   put({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -104,7 +104,7 @@ class FormDataAdapter implements RequestPort{
   /// Returns a [Future] of [ResponseData].
   @override
   patch({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -130,7 +130,7 @@ class FormDataAdapter implements RequestPort{
   /// Returns a [Future] of [ResponseData].
   @override
   delete({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final Duration timeout,
@@ -155,7 +155,7 @@ class FormDataAdapter implements RequestPort{
   /// Returns a [Future] of [ResponseData].
   @override
   Future<ResponseData> head({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final Duration timeout,
     required final List<MultipartFile> files,
@@ -179,7 +179,7 @@ class FormDataAdapter implements RequestPort{
   /// Returns a [Future] of [ResponseData].
   @override
   Future<ResponseData> read({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final Duration timeout,
     required final List<MultipartFile> files,
@@ -199,7 +199,7 @@ class FormDataAdapter implements RequestPort{
   /// [headers]: HTTP headers to include.
   /// [url]: The target URL.
   @override
-  download({required Map<String, String> headers, required String url}) {
+  download({required Map<String, String>? headers, required String url}) {
     throw UnimplementedError();
   }
 
@@ -222,7 +222,7 @@ class FormDataAdapter implements RequestPort{
   /// 4. For each [MultipartFile] in [files], read its bytes and add to the request.
   /// 5. Send the request, wait for the response, and process it through [ResponseFactory].
   Future<ResponseData> _formData({
-    required final Map<String, String> headers,
+    required final Map<String, String>? headers,
     required final String url,
     required final dynamic body,
     required final RequestType type,
@@ -235,8 +235,8 @@ class FormDataAdapter implements RequestPort{
       if (body != null) body.forEach((key, value) => data[key] = value.toString());
 
       final request = MultipartRequest(type.name.toUpperCase(), Uri.parse(url));
-      request.headers.addAll(headers);
-      request.fields.addAll(data);
+      if(headers != null) request.headers.addAll(headers);
+      if(files.isNotEmpty) request.fields.addAll(data);
 
       for (final file in files) {
         final bytes = await file.finalize().fold<List<int>>(<int>[], (a, b) => a..addAll(b));
