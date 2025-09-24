@@ -1,7 +1,9 @@
+## 1.2.0
+* Added support for READ, HEAD methods
+* restored https pluging for html support
+
 ## 1.1.0
-* http dependence has been removed
-* Added support for PATCH methods
-* Added new class MultipartFile
+* Added support for PATCH method
 
 ## 1.0.1
 * download response as been upgraded

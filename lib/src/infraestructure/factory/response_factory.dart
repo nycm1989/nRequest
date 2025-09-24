@@ -8,7 +8,17 @@ import 'package:n_request/src/domain/enums/request_type.dart' show RequestType;
 import 'package:n_request/src/domain/models/response_data.dart' show ResponseData;
 import 'package:n_request/src/infraestructure/repositories/status_repository.dart' show StatusRepository;
 
+/// Factory class responsible for creating [ResponseData] instances based on various response inputs.
+///
+/// This class handles the construction of response objects by interpreting raw responses, HTTP client responses,
+/// and different error conditions. It utilizes [StatusRepository] to fetch appropriate [StatusData] status codes
+/// and messages, and references [RequestType] to handle different request scenarios.
 class ResponseFactory {
+  /// Constructs a [ResponseData] object from the given response parameters.
+  ///
+  /// Handles different response types, including [HttpClientResponse], where it decodes the response body accordingly.
+  /// When the [type] is [RequestType.download] and a body is present, it returns the body with a 500 status.
+  /// If the response is null or not as expected, it returns a [ResponseData] with an error status.
   Future<ResponseData> make({
     required final dynamic      body,
     required final RequestType  type,
@@ -63,6 +73,9 @@ class ResponseFactory {
     }
   }
 
+  /// Returns a [ResponseData] representing a forbidden (403) HTTP status.
+  ///
+  /// Uses [StatusRepository] to fetch the 403 status and associates it with the provided [url] and [type].
   ResponseData forbidden({
     required final String url,
     required final RequestType type
@@ -74,6 +87,10 @@ class ResponseFactory {
   );
 
 
+  /// Returns a [ResponseData] representing a timeout (408) HTTP status.
+  ///
+  /// The [timeout] duration is included in the [StatusData.error] message to indicate how long was exceeded.
+  /// Fetches the 408 status from [StatusRepository] and customizes its error description.
   ResponseData timeoutException({
     required final Duration timeout,
     required final String url,
@@ -89,6 +106,10 @@ class ResponseFactory {
     );
   }
 
+  /// Returns a [ResponseData] representing a socket exception scenario.
+  ///
+  /// Fetches a generic status (code 0) from [StatusRepository] and customizes the description and error
+  /// to indicate a socket connection failure.
   ResponseData socketException({
     required final String url,
     required final RequestType type
@@ -104,6 +125,10 @@ class ResponseFactory {
     );
   }
 
+  /// Returns a [ResponseData] representing a client exception scenario.
+  ///
+  /// Uses [StatusRepository] to fetch a generic status (code 0) and sets a description and error
+  /// indicating an incompatible connection.
   ResponseData clientException({
     required final String url,
     required final RequestType type
@@ -119,6 +144,10 @@ class ResponseFactory {
     );
   }
 
+  /// Returns a [ResponseData] representing a generic error condition.
+  ///
+  /// Accepts an [error] object and optional [stackTrace], incorporates them into the [StatusData.error] message,
+  /// and fetches a generic status (code 0) from [StatusRepository].
   ResponseData onError({
     final Object? error,
     final StackTrace? stackTrace,

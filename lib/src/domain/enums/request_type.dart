@@ -4,6 +4,8 @@ enum RequestType{
   put,
   patch,
   delete,
+  head,
+  read,
   download,
   webSocket
 }

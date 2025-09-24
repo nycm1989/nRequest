@@ -1,6 +1,6 @@
 name: n_request
 description: "Simple helper for http requests"
-version: 1.1.0
+version: 1.2.0
 homepage: https://github.com/nycm1989/nRequest
 repository: https://github.com/nycm1989/nRequest
 license: GNU General Public License
@@ -19,6 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^1.5.0
   path: ^1.9.1
   web_socket_channel: ^3.0.3
 
