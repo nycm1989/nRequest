@@ -1,6 +1,5 @@
 import 'dart:async' show TimeoutException;
 import 'package:http/http.dart' show MultipartFile, MultipartRequest, Response, ClientException;
-import 'package:http_parser/http_parser.dart' show MediaType;
 
 import 'package:n_request/src/domain/enums/request_type.dart' show RequestType;
 import 'package:n_request/src/domain/models/response_data.dart' show ResponseData;
@@ -246,7 +245,7 @@ class FormDataAdapter implements RequestPort{
             file.field,
             bytes,
             filename    : file.filename ?? 'file',
-            contentType : MediaType.parse(file.contentType.type),
+            contentType : file.contentType,
           ),
         );
       }
