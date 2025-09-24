@@ -116,6 +116,24 @@ class RequestUseCase{
         );
       }
 
+      else if(type == RequestType.head) {
+        return port.head(
+          headers : _headers,
+          url     : url,
+          timeout : timeout,
+          files   : files
+        );
+      }
+
+      else if(type == RequestType.read) {
+        return port.read(
+          headers : _headers,
+          url     : url,
+          timeout : timeout,
+          files   : files
+        );
+      }
+
       else {
         return port.download(
           headers : _headers,

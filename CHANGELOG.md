@@ -1,3 +1,6 @@
+## 1.2.1
+* READ and HEAD routing has been fixed
+
 ## 1.2.0
 * Added support for READ, HEAD methods
 * restored https pluging for html support

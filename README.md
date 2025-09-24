@@ -1,14 +1,27 @@
 # Neil's Custom Request
 
-this is a simple helper project for http request
+This is a simple helper for HTTP requests
 
 ## With this widget, you can:
 - Make get, post, put, delete request
 - Make a custom request by type
-- Upload multipart files
+- Manage multipart files
 - Change headers
 - Single or multiple WebSocket with restarter and error control!
 - Donwload any file from https or http
+
+## Terminal preview
+```
+"GET ––--–-→ 💬 https://example.com/ → status: successful, OK
+"POST –--–-→ 💾 https://example.com/ → status: successful, OK
+"PUT ––--–-→ 📩 https://example.com/ → status: successful, OK
+"PATCH –-–-→ 📩 https://example.com/ → status: successful, OK
+"HEAD -–-–-→ 🫥 https://example.com/ → status: successful, OK
+"READ -–-–-→ 👀 https://example.com/ → status: successful, OK
+"DELETE ---→ 🗑️ https://example.com/ → status: successful, OK
+"DOWNLOAD -→ 🗑️ https://example.com/ → status: successful, OK
+```
+
 
 ## Example
 ```dart
@@ -28,7 +41,9 @@ await NRequest("url").download((Uint8List? data) {});
 await NRequest("url").get((ResponseData response) {});
 await NRequest("url").post((ResponseData response) {});
 await NRequest("url").put((ResponseData response) {});
-await NRequest("url").delete((ResponseData response) {});
+await NRequest("url").patch((ResponseData response) {});
+await NRequest("url").head((ResponseData response) {});
+await NRequest("url").read((ResponseData response) {});
 await NRequest("url").type(type: RequestType.post).then((ResponseData response) {});
 ```
 
@@ -56,9 +71,6 @@ url: String
 type: RequestType
 status: StatusData
 body: dynamic
-
-/// print a colored message, only works in debug mode
-printStatus()
 ```
 
 ### StatusData Properties
@@ -67,9 +79,6 @@ type: StatusType
 code: int
 isValid: bool
 description: String
-
-/// get status data message
-getMessage(): String
 ```
 
 

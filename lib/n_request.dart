@@ -155,20 +155,18 @@ class NRequest<R>{
   /// Sends a HEAD request ([RequestType.head]).
   ///
   /// Invokes the [onValue] callback with the [ResponseData] from the HEAD operation.
-  /// **Note:** Currently calls [RequestType.patch]; should call [RequestType.head].
   /// Returns a [Future] of type [R].
   Future<R> head (Function(ResponseData response) onValue) async =>
-    await _request(RequestType.patch).then((response) async =>
+    await _request(RequestType.head).then((response) async =>
       await onValue.call(response)
     );
 
   /// Sends a READ request ([RequestType.read]).
   ///
   /// Invokes the [onValue] callback with the [ResponseData] from the READ operation.
-  /// **Note:** Currently calls [RequestType.patch]; should call [RequestType.read].
   /// Returns a [Future] of type [R].
   Future<R> read (Function(ResponseData response) onValue) async =>
-    await _request(RequestType.patch).then((response) async =>
+    await _request(RequestType.read).then((response) async =>
       await onValue.call(response)
     );
 
