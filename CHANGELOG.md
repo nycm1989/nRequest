@@ -1,3 +1,7 @@
+## 1.2.2
+* Error messages are been fixed
+* content type fixed for json type
+
 ## 1.2.1
 * READ and HEAD routing has been fixed
 
