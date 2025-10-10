@@ -232,11 +232,19 @@ class FormDataAdapter implements RequestPort{
     final ResponseFactory responseFactory = ResponseFactory();
     try {
       Map<String, String> data = <String, String>{};
-      if (body != null) body.forEach((key, value) => data[key] = value.toString());
+
+      if (body != null) {
+        if (body is Map) {
+          body.forEach((key, value) => data[key.toString()] = value.toString());
+        } else {
+          throw ArgumentError('Body must be a Map for multipart/form-data');
+        }
+      }
 
       final request = MultipartRequest(type.name.toUpperCase(), Uri.parse(url));
       if(headers != null) request.headers.addAll(headers);
-      if(files.isNotEmpty) request.fields.addAll(data);
+      request.fields.addAll(data);
+      if (!request.headers.containsKey('Content-Type')) request.headers['Content-Type'] = 'multipart/form-data';
 
       for (final file in files) {
         final bytes = await file.finalize().fold<List<int>>(<int>[], (a, b) => a..addAll(b));

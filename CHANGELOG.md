@@ -1,3 +1,6 @@
+## 1.2.3
+* Header has been fixed for form-data when files is empty
+
 ## 1.2.2
 * Error messages are been fixed
 * content type fixed for json type

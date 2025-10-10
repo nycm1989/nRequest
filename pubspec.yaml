@@ -1,6 +1,6 @@
 name: n_request
 description: "Simple helper for http requests"
-version: 1.2.2
+version: 1.2.3
 homepage: https://github.com/nycm1989/nRequest
 repository: https://github.com/nycm1989/nRequest
 license: GNU General Public License
@@ -26,7 +26,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  # flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
