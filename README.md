@@ -34,7 +34,11 @@ await NRequest(
     "http://example.com/post/",
     body  : { "type": 1 },
     files : [ MultipartFile ]
-).post((response) {
+)
+// [1.3.0] New new pre-CRUD methods for each type of response!
+.onOk((response) => print("It`s all OK"))
+.onUnauthorized((response) => print("TODO: Make logout here!"))
+.post((response) {
     if(response.isValid) response.printStatus();
 });
 ```
@@ -51,8 +55,9 @@ await NRequest("url").put((ResponseData response) {});
 await NRequest("url").patch((ResponseData response) {});
 await NRequest("url").head((ResponseData response) {});
 await NRequest("url").read((ResponseData response) {});
-await NRequest("url").type(type: RequestType.post).then((ResponseData response) {});
 ```
+
+
 
 ### Setters
 

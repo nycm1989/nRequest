@@ -1,3 +1,6 @@
+## 1.3.0
+* New pre-CRUD methods for each type of response
+
 ## 1.2.3
 * Header has been fixed for form-data when files is empty
 
