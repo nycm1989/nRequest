@@ -31,7 +31,7 @@ The following example demonstrates how to make a POST request with a JSON body a
 
 ```dart
 await NRequest(
-    "http://example.com/post/",
+    url   : "http://example.com/post/",
     body  : { "type": 1 },
     files : [ MultipartFile ]
 )

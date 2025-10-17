@@ -1,3 +1,7 @@
+## 1.3.1
+* url key is required now
+* remove forbidden url's
+
 ## 1.3.0
 * New pre-CRUD methods for each type of response
 

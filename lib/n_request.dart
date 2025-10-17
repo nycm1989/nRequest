@@ -75,8 +75,8 @@ class NRequest<R> {
   /// Creates a new [NRequest] for the specified [url], with optional configuration parameters.
   ///
   /// Use the optional parameters to customize the request's body, files, timeout, headers, tokens, logging, and lifecycle callbacks.
-  NRequest(
-    this.url, {
+  NRequest({
+    required this.url,
     this.body,
     this.files = const [],
     this.timeout = const Duration(minutes: 5),

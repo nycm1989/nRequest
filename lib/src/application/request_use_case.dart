@@ -55,7 +55,7 @@ class RequestUseCase{
     required final bool printResponse,
   }) async {
     if(!_isValidUrl(url)) throw FormatException("Invalid URL");
-    if(_forbidenChecking(url)) return ResponseFactory().forbidden(url: url, type: type);
+    // if(_forbidenChecking(url)) return ResponseFactory().forbidden(url: url, type: type);
 
     final Map<String, String> _headers =
     headers == null
@@ -156,7 +156,7 @@ class RequestUseCase{
   }
 
   /// Checks if the given [url] contains any forbidden patterns defined by [ForbiddenRepository].
-  static bool _forbidenChecking(String url) => url.contains(ForbiddenRepository().toString());
+  // static bool _forbidenChecking(String url) => url.contains(ForbiddenRepository().toString());
 
   /// Validates that the [url] is a well-formed absolute URI with allowed schemes (http, https, ws, wss).
   static bool _isValidUrl(String url) {
