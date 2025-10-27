@@ -110,6 +110,7 @@ class NRequest<R> {
       token         : token,
       printUrl      : printUrl,
       silent        : silent,
+      formData      : formData,
       printHeaders  : printHeaders,
       printBody     : printBody,
       printResponse : printResponse,

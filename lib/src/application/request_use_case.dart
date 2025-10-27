@@ -11,7 +11,7 @@ import 'package:n_request/src/infraestructure/repositories/forbidden_repository.
 /// It supports multiple HTTP methods defined by [RequestType], and returns a [ResponseData] object.
 /// This use case handles request headers via [HeaderRepository], checks forbidden URLs using [ForbiddenRepository],
 /// and manages response creation with [ResponseFactory]. It also supports debug printing through [PrintFactory].
-class RequestUseCase{
+class RequestUseCase {
   /// Creates a [RequestUseCase] with the required [RequestPort] implementation.
   RequestUseCase({required this.port});
 
@@ -30,6 +30,7 @@ class RequestUseCase{
   /// - [timeout]: Duration before the request times out (default 5 minutes).
   /// - [body]: Optional request body.
   /// - [silent]: If true, suppresses printing debug information.
+  /// - [formData]: Print type router
   /// - [printUrl]: If true, prints the request URL.
   /// - [printHeaders]: If true, prints the request headers.
   /// - [printBody]: If true, prints the request body.
@@ -48,6 +49,7 @@ class RequestUseCase{
     final List<MultipartFile>   files         = const [],
     final Duration              timeout       = const Duration(minutes: 5),
     final dynamic body,
+    required final bool formData,
     required final bool silent,
     required final bool printUrl,
     required final bool printHeaders,
@@ -147,7 +149,7 @@ class RequestUseCase{
       PrintFactory.printStatus(url, response);
       if(printUrl)      PrintFactory.printUrl(url);
       if(printHeaders)  PrintFactory.printHeaders(_headers);
-      if(printBody)     PrintFactory.printBody(body);
+      if(printBody)     PrintFactory.printBody(body: body, files: files, formData: formData);
       if(printResponse) PrintFactory.printResponse(response.body);
 
       return response;

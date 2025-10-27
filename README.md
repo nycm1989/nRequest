@@ -1,6 +1,6 @@
 # Neil's Custom Request (n_request)
 
-`n_request` is a lightweight and easy-to-use HTTP request helper designed to simplify network operations in your Dart and Flutter projects. It addresses common challenges such as making various types of HTTP requests, handling multipart file uploads, managing headers and tokens, and integrating WebSocket connections with automatic reconnection and error handling. Whether you need to perform simple GET requests or manage complex WebSocket communication, `n_request` provides a unified, intuitive API to streamline your network interactions.
+`n_request` is a lightweight and easy-to-use HTTP request helper designed to simplify network operations in your Flutter projects. It addresses common challenges such as making various types of HTTP requests, handling multipart file uploads, managing headers and tokens, and integrating WebSocket connections with automatic reconnection and error handling. Whether you need to perform simple GET requests or manage complex WebSocket communication, `n_request` provides a unified, intuitive API to streamline your network interactions.
 
 ## Features
 - Perform HTTP requests of various types including GET, POST, PUT, DELETE, PATCH, HEAD, and custom types with ease.
@@ -48,13 +48,13 @@ await NRequest(
 This section lists the available HTTP request methods you can use with `NRequest`:
 
 ```dart
-await NRequest("url").download((Uint8List? data) {});
-await NRequest("url").get((ResponseData response) {});
-await NRequest("url").post((ResponseData response) {});
-await NRequest("url").put((ResponseData response) {});
-await NRequest("url").patch((ResponseData response) {});
-await NRequest("url").head((ResponseData response) {});
-await NRequest("url").read((ResponseData response) {});
+await NRequest(url: "url").download((Uint8List? data) {});
+await NRequest(url: "url").get((ResponseData response) {});
+await NRequest(url: "url").post((ResponseData response) {});
+await NRequest(url: "url").put((ResponseData response) {});
+await NRequest(url: "url").patch((ResponseData response) {});
+await NRequest(url: "url").head((ResponseData response) {});
+await NRequest(url: "url").read((ResponseData response) {});
 ```
 
 

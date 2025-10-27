@@ -1,3 +1,6 @@
+## 1.3.2
+* New form-data print
+
 ## 1.3.1
 * url key is required now
 * remove forbidden url's

@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 import 'dart:convert' show json;
 import 'package:flutter/foundation.dart' show Uint8List, kDebugMode, kIsWeb;
+import 'package:http/http.dart';
 import 'package:n_request/n_request.dart' show RequestType, ResponseData;
 import 'package:n_request/src/domain/enums/status_type.dart' show StatusType;
 import 'package:n_request/src/domain/enums/status_color.dart' show StatusColor;
@@ -102,8 +103,33 @@ class PrintFactory{
     kDebugMode ? print("- Headers: ${json.encode(headers)}") : null;
 
   /// Prints the request body as a JSON string in debug mode.
-  static void printBody(final dynamic body) =>
-    kDebugMode ? print("- Body: ${json.encode(body)}") : null;
+  static void printBody({
+    required final dynamic body,
+    required final List<MultipartFile> files,
+    required final bool formData
+  }) {
+    if(kDebugMode) {
+      try{
+        if(formData){
+          print("- Body (form-data):");
+          for (var entry in body.entries) {
+            print("  ${entry.key}=${entry.value}/");
+          }
+          if (files.isNotEmpty) {
+            for (var file in files) {
+              print("  ${file.field}=multipart-file/");
+            }
+          }
+        } else if(body is Map<String, dynamic> || body is Map<String, String>){
+          print("- Body: ${json.encode(body)}");
+        } else {
+          print("- Body: uncodable");
+        }
+      } catch(e) {
+        print("- Body: uncodable");
+      }
+    }
+  }
 
   /// Prints the response body as a JSON string (or raw bytes for [Uint8List]) in debug mode.
   static void printResponse(final dynamic response) =>
