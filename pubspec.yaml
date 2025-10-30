@@ -13,8 +13,7 @@ topics:
 
 
 environment:
-  sdk: ^3.9.0
-  flutter: ">=1.17.0"
+  sdk: ^3.9.2
 
 dependencies:
   flutter:

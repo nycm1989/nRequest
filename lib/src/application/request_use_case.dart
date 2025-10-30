@@ -5,7 +5,6 @@ import 'package:n_request/src/infraestructure/ports/request_port.dart' show Requ
 import 'package:n_request/src/infraestructure/factory/print_factory.dart' show PrintFactory;
 import 'package:n_request/src/infraestructure/factory/response_factory.dart' show ResponseFactory;
 import 'package:n_request/src/infraestructure/repositories/header_repository.dart' show HeaderRepository;
-import 'package:n_request/src/infraestructure/repositories/forbidden_repository.dart' show ForbiddenRepository;
 
 /// The [RequestUseCase] class is responsible for executing HTTP requests using the provided [RequestPort] implementation.
 /// It supports multiple HTTP methods defined by [RequestType], and returns a [ResponseData] object.
