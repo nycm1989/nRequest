@@ -62,17 +62,19 @@ class ResponseFactory {
     }
   }
 
-  ResponseData forbidden({
-    required final String url,
-    required final RequestType type
-  }) =>
-  ResponseData(
-    url     : url,
-    type    : type,
-    status  : StatusRepository().getStatus(403)
-  );
+  // ResponseData forbidden({
+  //   required final String url,
+  //   required final RequestType type
+  // }) =>
+  // ResponseData(
+  //   url     : url,
+  //   type    : type,
+  //   status  : StatusRepository().getStatus(403)
+  // );
 
 
+  /// Generates a ResponseData for timeout exceptions.
+  /// Uses error code 408.
   ResponseData timeoutException({
     required final Duration timeout,
     required final String url,
@@ -88,11 +90,28 @@ class ResponseFactory {
     );
   }
 
+  /// Generates a ResponseData for SSL exceptions.
+  /// Uses error code 525.
+  ResponseData sslException({
+    required final String url,
+    required final RequestType type
+  }) {
+    StatusData status = StatusRepository().getStatus(525);
+
+    return ResponseData(
+      url     : url,
+      type    : type,
+      status  : status
+    );
+  }
+
+  /// Generates a ResponseData for socket exceptions.
+  /// Uses error code 503.
   ResponseData socketException({
     required final String url,
     required final RequestType type
   }) {
-    StatusData status   = StatusRepository().getStatus(0);
+    StatusData status   = StatusRepository().getStatus(503);
     status.description  = "Request Socket Exception";
     status.error        = "Cant connect to the server";
 
@@ -103,11 +122,13 @@ class ResponseFactory {
     );
   }
 
+  /// Generates a ResponseData for client exceptions.
+  /// Uses error code 400.
   ResponseData clientException({
     required final String url,
     required final RequestType type
   }) {
-    StatusData status   = StatusRepository().getStatus(0);
+    StatusData status   = StatusRepository().getStatus(400);
     status.description  = "Request Client Exception";
     status.error        = "Incompatible connection";
 
@@ -118,6 +139,8 @@ class ResponseFactory {
     );
   }
 
+  /// Generates a ResponseData for unhandled errors.
+  /// Uses error code 0.
   ResponseData onError({
     final Object? error,
     final StackTrace? stackTrace,

@@ -1,3 +1,8 @@
+## 1.3.3
+* [Upgrade] SDK has been upgraded
+* [New] handle for 525 SSL/TLS handshake failed or invalid certificate
+* [fix] fix for handling code 0 - Front-end exception.
+
 ## 1.3.2
 * New form-data print
 

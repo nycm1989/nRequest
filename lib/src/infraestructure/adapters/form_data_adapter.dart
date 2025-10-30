@@ -1,4 +1,5 @@
 import 'dart:async' show TimeoutException;
+import 'dart:io' show SocketException, HandshakeException;
 import 'package:http/http.dart' show MultipartFile, MultipartRequest, Response, ClientException;
 
 import 'package:n_request/src/domain/enums/request_type.dart' show RequestType;
@@ -269,9 +270,11 @@ class FormDataAdapter implements RequestPort{
         )
       );
     }
-    on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
-    on ClientException { return responseFactory.onError(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type); }
+    on SocketException    { return responseFactory.socketException  (url: url, type: type); }
+    on HandshakeException { return responseFactory.sslException     (url: url, type: type); }
+    on TimeoutException   { return responseFactory.timeoutException (url: url, type: type, timeout: timeout); }
+    on ClientException    { return responseFactory.clientException  (url: url, type: type); }
+    catch (error)         { return responseFactory.onError          (url: url, type: type, error: error); }
   }
 
 }

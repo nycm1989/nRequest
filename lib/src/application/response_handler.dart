@@ -201,6 +201,9 @@ class ResponseHandler<R> {
   /// Triggered when the status code is 511 - Network Authentication Required.
   ResponseHandler<R> onNetworkAuthenticationRequired(Function(ResponseData response) callback) => _register(511, callback);
 
+  /// Triggered when the status code is 525 - SSL/TLS handshake failed or invalid certificate.
+  ResponseHandler<R> onSSLException(Function(ResponseData response) callback) => _register(525, callback);
+
 
   /// Executes the callback corresponding to the response status code, if any.
   void handle(ResponseData response) {

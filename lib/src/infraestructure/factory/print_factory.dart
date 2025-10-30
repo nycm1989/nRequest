@@ -120,10 +120,10 @@ class PrintFactory{
               print("  ${file.field}=multipart-file/");
             }
           }
-        } else if(body is Map<String, dynamic> || body is Map<String, String>){
+        } else if(body is Map<String, dynamic> || body is Map<String, String> || body is List){
           print("- Body: ${json.encode(body)}");
         } else {
-          print("- Body: uncodable");
+          print("- Body: uncodable (${body.runtimeType})");
         }
       } catch(e) {
         print("- Body: uncodable");

@@ -594,4 +594,10 @@ class NRequest<R> {
     _responseHandler.onNetworkAuthenticationRequired(callback);
     return this;
   }
+
+  /// Registers a callback for 525 SSL/TLS handshake failed or invalid certificate.
+  NRequest<R> onSSLException(Function(ResponseData response) callback) {
+    _responseHandler.onSSLException(callback);
+    return this;
+  }
 }

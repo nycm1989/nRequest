@@ -1,5 +1,6 @@
 import 'dart:async' show TimeoutException;
 import 'dart:convert' show json;
+import 'dart:io' show SocketException, HandshakeException;
 import 'package:http/http.dart' show Client, ClientException;
 
 import 'package:n_request/src/domain/enums/request_type.dart' show RequestType;
@@ -33,9 +34,10 @@ class RequestAdapter implements RequestPort{
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.get;
+    final Client client = Client();
 
     try{
-      return await Client()
+      return await client
       .get(
         Uri.parse(url),
         headers: headers ?? {...HeaderRepository().jsonHeaders, ...HeaderRepository().corsHeaders}
@@ -48,11 +50,15 @@ class RequestAdapter implements RequestPort{
           url       : url,
           body      : null
         )
-      );
+      )
+      .onError((error, stacktrace) => responseFactory.onError(url: url, type: type, error: error));
     }
-    on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
-    on ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
+    on SocketException    { return responseFactory.socketException  (url: url, type: type); }
+    on HandshakeException { return responseFactory.sslException     (url: url, type: type); }
+    on TimeoutException   { return responseFactory.timeoutException (url: url, type: type, timeout: timeout); }
+    on ClientException    { return responseFactory.clientException  (url: url, type: type); }
+    catch (error)         { return responseFactory.onError          (url: url, type: type, error: error); }
+    finally               { client.close(); }
   }
 
 
@@ -77,9 +83,10 @@ class RequestAdapter implements RequestPort{
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.post;
     final String _body = json.encode( body );
+    final Client client = Client();
 
     try{
-      return await Client()
+      return await client
       .post(
         Uri.parse(url),
         //TODO: make an enum that contains the body types to correctly route the contents in the headers
@@ -99,9 +106,12 @@ class RequestAdapter implements RequestPort{
         );
       });
     }
-    on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
-    on ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
+    on SocketException    { return responseFactory.socketException  (url: url, type: type); }
+    on HandshakeException { return responseFactory.sslException     (url: url, type: type); }
+    on TimeoutException   { return responseFactory.timeoutException (url: url, type: type, timeout: timeout); }
+    on ClientException    { return responseFactory.clientException  (url: url, type: type); }
+    catch (error)         { return responseFactory.onError          (url: url, type: type, error: error); }
+    finally               { client.close(); }
   }
 
 
@@ -126,9 +136,10 @@ class RequestAdapter implements RequestPort{
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.put;
     final String _body = json.encode( body );
+    final Client client = Client();
 
     try {
-      return await Client()
+      return await client
       .put(
         Uri.parse(url),
         headers : headers ?? <String, String>{}
@@ -146,9 +157,12 @@ class RequestAdapter implements RequestPort{
         )
       );
     }
-    on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
-    on ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
+    on SocketException    { return responseFactory.socketException  (url: url, type: type); }
+    on HandshakeException { return responseFactory.sslException     (url: url, type: type); }
+    on TimeoutException   { return responseFactory.timeoutException (url: url, type: type, timeout: timeout); }
+    on ClientException    { return responseFactory.clientException  (url: url, type: type); }
+    catch (error)         { return responseFactory.onError          (url: url, type: type, error: error); }
+    finally               { client.close(); }
   }
 
 
@@ -173,9 +187,10 @@ class RequestAdapter implements RequestPort{
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.patch;
     final String _body = json.encode( body );
+    final Client client = Client();
 
     try {
-      return await Client()
+      return await client
       .patch(
         Uri.parse(url),
         headers : headers ?? <String, String>{}
@@ -193,9 +208,12 @@ class RequestAdapter implements RequestPort{
         )
       );
     }
-    on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
-    on ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
+    on SocketException    { return responseFactory.socketException  (url: url, type: type); }
+    on HandshakeException { return responseFactory.sslException     (url: url, type: type); }
+    on TimeoutException   { return responseFactory.timeoutException (url: url, type: type, timeout: timeout); }
+    on ClientException    { return responseFactory.clientException  (url: url, type: type); }
+    catch (error)         { return responseFactory.onError          (url: url, type: type, error: error); }
+    finally               { client.close(); }
   }
 
 
@@ -220,9 +238,10 @@ class RequestAdapter implements RequestPort{
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.delete;
     final String _body = json.encode( body );
+    final Client client = Client();
 
     try {
-      return await Client()
+      return await client
       .delete(
         Uri.parse(url),
         headers : headers ?? <String, String>{}
@@ -240,9 +259,12 @@ class RequestAdapter implements RequestPort{
         )
       );
     }
-    on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
-    on ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
+    on SocketException    { return responseFactory.socketException  (url: url, type: type); }
+    on HandshakeException { return responseFactory.sslException     (url: url, type: type); }
+    on TimeoutException   { return responseFactory.timeoutException (url: url, type: type, timeout: timeout); }
+    on ClientException    { return responseFactory.clientException  (url: url, type: type); }
+    catch (error)         { return responseFactory.onError          (url: url, type: type, error: error); }
+    finally               { client.close(); }
   }
 
 
@@ -263,9 +285,10 @@ class RequestAdapter implements RequestPort{
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.head;
+    final Client client = Client();
 
     try{
-      return await Client()
+      return await client
       .head(
         Uri.parse(url),
         headers : headers ?? <String, String>{}
@@ -282,9 +305,12 @@ class RequestAdapter implements RequestPort{
         )
       );
     }
-    on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
-    on ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error){ return responseFactory.onError(url: url, type: type, error: error); }
+    on SocketException    { return responseFactory.socketException  (url: url, type: type); }
+    on HandshakeException { return responseFactory.sslException     (url: url, type: type); }
+    on TimeoutException   { return responseFactory.timeoutException (url: url, type: type, timeout: timeout); }
+    on ClientException    { return responseFactory.clientException  (url: url, type: type); }
+    catch (error)         { return responseFactory.onError          (url: url, type: type, error: error); }
+    finally               { client.close(); }
   }
 
 
@@ -305,9 +331,10 @@ class RequestAdapter implements RequestPort{
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.read;
+    final Client client = Client();
 
     try{
-      return await Client()
+      return await client
       .get(
         Uri.parse(url),
         headers : headers ?? <String, String>{}
@@ -324,9 +351,12 @@ class RequestAdapter implements RequestPort{
         )
       );
     }
-    on TimeoutException { return responseFactory.timeoutException(timeout: timeout, url: url, type: type); }
-    on ClientException { return responseFactory.socketException(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
+    on SocketException    { return responseFactory.socketException  (url: url, type: type); }
+    on HandshakeException { return responseFactory.sslException     (url: url, type: type); }
+    on TimeoutException   { return responseFactory.timeoutException (url: url, type: type, timeout: timeout); }
+    on ClientException    { return responseFactory.clientException  (url: url, type: type); }
+    catch (error)         { return responseFactory.onError          (url: url, type: type, error: error); }
+    finally               { client.close(); }
   }
 
 
@@ -344,9 +374,10 @@ class RequestAdapter implements RequestPort{
   }) async {
     final ResponseFactory responseFactory = ResponseFactory();
     final RequestType type = RequestType.download;
+    final Client client = Client();
 
     try{
-      return await Client()
+      return await client
       .get(
         Uri.parse(url),
         headers : headers ?? <String, String>{}
@@ -375,8 +406,11 @@ class RequestAdapter implements RequestPort{
         }
       });
     }
-    on ClientException  { return responseFactory.socketException(url: url, type: type); }
-    catch (error) { return responseFactory.onError(url: url, type: type, error: error); }
+    on SocketException    { return responseFactory.socketException  (url: url, type: type); }
+    on HandshakeException { return responseFactory.sslException     (url: url, type: type); }
+    on ClientException    { return responseFactory.clientException  (url: url, type: type); }
+    catch (error)         { return responseFactory.onError          (url: url, type: type, error: error); }
+    finally               { client.close(); }
   }
 
 }
